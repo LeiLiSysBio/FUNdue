@@ -1,6 +1,6 @@
 main(){
 	PYTHON_PATH=python3.3
-	TRAPL_FUN_PATH=bin/traplfun
+	TRAPL_FUN_PATH=/bin/traplfun
 	TRAPL_FUN_FOLDER=TRAPL_FUN_analysis
 	FTP_SOURCE=ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Salmonella_enterica_serovar_Typhimurium_SL1344_uid86645/
 	GO_OBO_FILE=/storage2/lei/project/TRAPL_FUN/gene_ontology.1_2.obo
@@ -57,8 +57,12 @@ generate_package_to_send(){
 	SEND_FOLDER=2014-01-24-Dagmar-Gene_Ontology-Analysis
 	TRAPL_FUN=TRAPL_FUN_analysis/
 	mkdir ${SEND_FOLDER}
-	cp -r ${TRAPL_FUN}/Gene_ontology/*.xlsx ${SEND_FOLDER}
+	cp -r ${TRAPL_FUN}/Gene_ontology/ ${SEND_FOLDER}
 	zip -r ${SEND_FOLDER}.zip ${SEND_FOLDER}
+}
+
+compress_files(){
+	find ${SEND_FOLDER} -type f -print0 | xargs -n1 -0 -P24 bzip2
 }
 
 main
