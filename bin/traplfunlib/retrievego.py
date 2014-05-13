@@ -14,11 +14,10 @@ class RetrieveGo(object):
         for uni_id in idmapping:
             uni_line = uni_id.rstrip("\n")
             uni_lines = uni_line.split("\t")
-            for ref_name in name_list:
-                if ref_name == uni_lines[3]:
-                    print("mapping your file......")
-                    background_id_file.write(ref_name + "\t" + uni_lines[0] + "\t" +
-                        uni_lines[2] + "\t" + uni_lines[6] + "\n")
+            if uni_lines[3] in name_list:
+                print("mapping your file......")
+                background_id_file.write(uni_lines[3] + "\t" + uni_lines[0] + "\t" +
+                    uni_lines[2] + "\t" + uni_lines[6] + "\n")
 
         background_id_file.close()
 
