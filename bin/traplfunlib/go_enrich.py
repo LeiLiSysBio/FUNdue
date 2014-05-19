@@ -41,6 +41,11 @@ class goenrichanalysis(object):
 
         background_no = len(background_list)
         target_no = len(target_list)
+        go_out_file.write("Gene ontology term"+ "\t" + "ontology description" \
+                          + "\t" + "target number" + "\t" + "total target numbers" \
+                          + "\t" + "ratio of  targets" + "\t" + "background_number" \
+                          + "\t" + "total background numbers" + "\t" + "ratio of background" \
+                          + "\t" + "pvalue" +"\n")
         for term, target_count in target_term.items():
             background_count = background_term[term]
             target_other = target_no - target_count
@@ -49,9 +54,9 @@ class goenrichanalysis(object):
                                                     [background_count,background_other]])
             ratio_target = float(target_count) / float(target_no)
             ratio_background = float(background_count) / float(background_no)
-            go_out_file.write(term + "\t" + go_obo[term].name + "\t" + str(target_count) 
-                + "\t" + str(target_no) + "\t" + str(ratio_target) + "\t" 
-                + str(background_count) + "\t" + str(background_no) + "\t" 
+            go_out_file.write(term + "\t" + go_obo[term].name + "\t" + str(target_count)
+                + "\t" + str(target_no) + "\t" + str(ratio_target) + "\t"
+                + str(background_count) + "\t" + str(background_no) + "\t"
                 + str(ratio_background) + "\t" + str(pvalue) + "\n")
 
 class count(object):

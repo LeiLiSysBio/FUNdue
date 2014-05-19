@@ -29,7 +29,7 @@ class Controller(object):
         annotation_files = self._paths.get_annotation_files()
         annotation_paths = self._paths.set_annotation_paths(annotation_files)
         go_creator = RetrieveGo()
-        name_list = []
+        name_list = set()
         gffparser = Gff3Parser()
         for annotation_single_file in annotation_paths:
             for entry in gffparser.entries(open(annotation_single_file)):
@@ -37,7 +37,7 @@ class Controller(object):
                     try:
                         ref_name = entry.attributes["Name"]
                         if ref_name not in name_list:
-                            name_list.append(ref_name)
+                            name_list.add(ref_name)
                     except:
                         ref_name = ''
 
