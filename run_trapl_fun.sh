@@ -1,5 +1,5 @@
 main(){
-	PYTHON_PATH=python3.4
+	PYTHON_PATH=python3.3
 	TRAPL_FUN_PATH=bin/traplfun
 	TRAPL_FUN_FOLDER=TRAPL_FUN_analysis
 	FTP_SOURCE=ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Salmonella_enterica_serovar_Typhimurium_SL1344_uid86645/
