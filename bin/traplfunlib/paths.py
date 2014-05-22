@@ -20,18 +20,18 @@ class Paths(object):
 
     def _set_go_folder_names(self):
         self.go_base_folder = "%s/gene_ontology" % self.output_folder
-        self.go_target_list_folder = "%s/target_id_go/" % self.go_base_folder
+        #self.go_target_list_folder = "%s/target_id_go/" % self.go_base_folder
         self.go_background_folder = "%s/background_go/" % self.go_base_folder
         self.go_enrich_folder = "%s/go_enrichment/" % self.go_base_folder
         self.go_viz_folder = "%s/go_viz/" % self.go_base_folder
-        self.go_target_list_path = (
-            "%s/target_id_go.txt" %
-            self.go_target_list_folder)
+        #self.go_target_list_path = (
+        #    "%s/target_id_go.txt" %
+        #    self.go_target_list_folder)
         self.go_background_list_path = (
-            "%s/background_go.txt" %
+            "%s/background_go.csv" %
             self.go_background_folder)
         self.go_enrich_list_path = (
-            "%s/go_term_stat.txt" %
+            "%s/go_term_stat.csv" %
             self.go_enrich_folder)
 
     def _set_kegg_folder_names(self):
@@ -40,10 +40,10 @@ class Paths(object):
         self.kegg_enrich_folder = "%s/pathway_enrichment/" % self.kegg_base_folder
         self.kegg_viz_folder = "%s/kegg_viz/" %self.kegg_base_folder
         self.kegg_background_list_path = (
-            "%s/background_kegg.txt" %
+            "%s/background_kegg.csv" %
             self.kegg_background_folder)
         self.kegg_enrich_list_path = (
-            "%s/pathway_stat.txt" %
+            "%s/pathway_stat.csv" %
             self.kegg_enrich_folder)
         
     def _set_static_files(self):
@@ -65,8 +65,8 @@ class Paths(object):
         return [self.annotation_folder,self.target_id_folder]
 
     def required_go_folders(self):
-        return [self.go_base_folder,self.go_target_list_folder,
-               self.go_enrich_folder,self.go_viz_folder, self.go_background_folder]
+        return [self.go_base_folder,self.go_enrich_folder,
+                self.go_viz_folder, self.go_background_folder]
     
     def required_kegg_folders(self):
         return [self.kegg_base_folder, self.kegg_background_folder,

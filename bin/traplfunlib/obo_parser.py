@@ -26,15 +26,6 @@ def read_until(handle, start):
 
 
 class OBOReader:
-    """
-    parse obo file, usually the most updated can be downloaded from
-    http://www.geneontology.org/ontology/obo_format_1_2/gene_ontology.1_2.obo
-
-    >>> reader = OBOReader()
-    >>> for rec in reader:
-            print rec
-
-    """
 
     def __init__(self, obo_file="gene_ontology.1_2.obo"):
 

@@ -7,11 +7,11 @@ main(){
 	
 	# create_folders
 	# set_up_analysis_folder
-	# get_gff_files
+	 get_gff_files
 	# run_retrieveGO
+	# run_go_enrichment_analysis
 	# run_retrievepathway
 	# run_pathway_enrichment_analysis
-	# run_go_enrichment_analysis
 	# generate_package_to_send
  	# compress_files
 }

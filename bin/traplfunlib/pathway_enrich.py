@@ -1,12 +1,9 @@
-import sys
 from scipy import stats
 import collections
-from traplfunlib.gff3 import Gff3Parser
-from traplfunlib.paths import Paths
+
 
 class Pathway_analysis(object):
-	# perform pathway enrichment analysis
-	def pathway_enrichment(self,target_id_file, background_file, pathway_enrich_out):
+	def pathway_enrichment(self, target_id_file, background_file, pathway_enrich_out):
 		target_list = []
 		background_list = []
 		target_no = 0
@@ -36,7 +33,7 @@ class Pathway_analysis(object):
 			entry_str =''.join(entry)
 			if entry_str in background_list:
 				target_no = target_no + 1
-				
+
 		count_obj = count()
 		background_term = count_obj.count_terms(background_list,associate_id_map)
 		target_term = count_obj.count_terms(target_list,associate_id_map)
@@ -59,7 +56,9 @@ class Pathway_analysis(object):
 			pathway_enrich_file.write(term + "\t" + associate_map_desc[term] + "\t" \
 				+ str(target_count) + "\t" + str(target_no) + "\t" \
 				+ str(ratio_target) + "\t" + str(background_count) + "\t" \
-				+ str(background_no) + "\t" + str(ratio_background) + "\t" + str(pvalue) + "\n")
+				+ str(background_no) + "\t" + str(ratio_background) + "\t" \
+				+ str(pvalue) + "\n")
+
 
 class count(object):
 	def count_terms(self, geneset, assoc):
