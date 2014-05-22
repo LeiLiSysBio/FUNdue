@@ -10,13 +10,16 @@ class RetrieveGo(object):
 
         idmapping = open(id_mapping,"r")
         background_id_file = open(background_id,"a")
+        print("mapping your file, normally need 10-30min to finish")
+        num = 0
         for uni_id in idmapping:
             uni_line = uni_id.rstrip("\n")
             uni_lines = uni_line.split("\t")
-            print("You file is mapping...")
+            #print("You file is mapping...")
             #for ref_name in name_list:
             if uni_lines[3] in name_list:
-                #print("mapping your file......")
+                num = num + 1
+                print("Getting your %s hit" % num )
                 background_id_file.write(uni_lines[3] + "\t" + uni_lines[0] + "\t" + \
                                          uni_lines[2] + "\t" + uni_lines[6] + "\n")
 

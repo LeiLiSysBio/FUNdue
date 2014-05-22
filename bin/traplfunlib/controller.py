@@ -7,6 +7,9 @@ from traplfunlib.projectcreator import ProjectCreator
 from traplfunlib.retrievego import RetrieveGo
 from traplfunlib.gff3 import Gff3Parser
 from traplfunlib.go_enrich import goenrichanalysis
+from traplfunlib.retrievepathway import Retrievepathway
+from traplfunlib.pathway_enrich import Pathway_analysis
+
 
 class Controller(object):
     """Control all the commands."""
@@ -46,6 +49,15 @@ class Controller(object):
                                self._paths.uniprot_id_mapping_path,
                                self._paths.go_background_list_path)
 
+    def kegg_terms(self):
+        self._test_folder_existance(
+            self._paths.required_kegg_folders())
+        retrieve_pathway = Retrievepathway()
+        retrieve_pathway.buildpathway(self._paths.build_pathway_path,
+                        self._args.code,
+                        self._paths.kegg_background_list_path)
+        
+        
     def go_stat(self):
         target_id_file = self._paths.get_target_id_files()
         target_id_paths = self._paths.set_target_id_paths(target_id_file)
@@ -59,6 +71,18 @@ class Controller(object):
                                       self._paths.go_enrich_list_path)
 
 
+    def pathway_stat(self):
+        target_id_file = self._paths.get_target_id_files()
+        target_id_paths = self._paths.set_target_id_paths(target_id_file)
+        self._test_folder_existance(target_id_paths)
+        kegg_enrichment = Pathway_analysis()
+        
+        open(self._paths.kegg_enrich_list_path,"w").close()
+        kegg_enrichment.pathway_enrichment(target_id_paths,
+                                            self._paths.kegg_background_list_path,
+                                            self._paths.kegg_enrich_list_path)
+        
+    
     def _test_folder_existance(self, task_specific_folders):
         for folder in (
             self._paths.required_base_folders() + task_specific_folders):

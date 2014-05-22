@@ -32,6 +32,18 @@ def main():
         "directory is used.")
     go_retrieving_parser.set_defaults(func=go_terms)
 
+    # Parameters for pathway retrieval
+    kegg_retrieving_parser = subparsers.add_parser(
+        "retrieve_pa", help= "Run pathway retrieve")
+    kegg_retrieving_parser.add_argument(
+        "project_path",default=".",nargs="?",
+        help="Path of the project folder. If none is given the current "
+        "directory is used.")
+    kegg_retrieving_parser.add_argument(
+        "--code", "-c", required=True,
+        help="KEGG organism code")
+    kegg_retrieving_parser.set_defaults(func=kegg_terms)
+    
     # Parameters for go enrichment analysis
     go_enrich_parser = subparsers.add_parser(
         "go_stat", help = "Run go terms statistics")
@@ -40,7 +52,16 @@ def main():
         help="Path of the project folder. If none is given the current"
         "directory is used.")
     go_enrich_parser.set_defaults(func=go_stat)
-
+    
+    # Parameters for pathway enrichment analysis
+    kegg_enrich_parser = subparsers.add_parser(
+        "pathway_stat", help= "Run pathway statistics")
+    kegg_enrich_parser.add_argument(
+        "project_path",default=".",nargs="?",
+        help="Path of the project folder. If none is given, the current"
+        "directory is used")
+    kegg_enrich_parser.set_defaults(func=pathway_stat)
+    
     args = parser.parse_args()
     if args.version is True:
         print("TRAPL_FUN_version " + __version__)
@@ -56,7 +77,13 @@ def create_project(controller):
 def go_terms(controller):
     controller.go_terms()
 
+def kegg_terms(controller):
+    controller.kegg_terms()
+    
 def go_stat(controller):
     controller.go_stat()
 
+def pathway_stat(controller):
+    controller.pathway_stat()
+    
 main()

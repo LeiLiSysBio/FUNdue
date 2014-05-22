@@ -63,10 +63,10 @@ class count(object):
     def count_terms(self, geneset, assoc, obo_dag):
       term_cnt = collections.defaultdict(int)
       self.assoc = assoc
-      for g in geneset:
-        g_str = ''.join(g)
-        if g_str in assoc:
-            for x in assoc[g_str]:
+      for each_gene in geneset:
+        each_gene_str = ''.join(each_gene)
+        if each_gene_str in assoc:
+            for x in assoc[each_gene_str]:
                 if x in obo_dag:
                     term_cnt[obo_dag[x].id] += 1
 
