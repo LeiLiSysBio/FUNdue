@@ -10,6 +10,7 @@ class goenrichanalysis(object):
 
         target_list = []
         background_list = []
+        target_no = 0
         association_list = {}
         go_out_file = open(go_enrich_out,"a")
 
@@ -27,7 +28,12 @@ class goenrichanalysis(object):
                 association_list[uni_lines[0]] = go_split
                 if uni_lines[0] not in background_list:
                     background_list.append(uni_lines[0])
-
+        
+        for entry in target_list:
+            entry_str = ''.join(entry)
+            if entry_str in background_list:
+                target_no = target_no + 1
+        
         go_obo = GODag(obo_file_path)
         go_obo.update_association(association_list)
 
@@ -40,7 +46,7 @@ class goenrichanalysis(object):
                                   association_list, go_obo)
 
         background_no = len(background_list)
-        target_no = len(target_list)
+        #target_no = len(target_list)
         go_out_file.write("Gene ontology term"+ "\t" + "ontology description" \
                           + "\t" + "target number" + "\t" + "total target numbers" \
                           + "\t" + "ratio of  targets" + "\t" + "background_number" \

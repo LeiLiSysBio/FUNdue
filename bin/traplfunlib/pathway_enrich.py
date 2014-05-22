@@ -9,18 +9,19 @@ class Pathway_analysis(object):
 	def pathway_enrichment(self,target_id_file, background_file, pathway_enrich_out):
 		target_list = []
 		background_list = []
+		target_no = 0
 		associate_id_map = {}
 		associate_map_desc = {}
 		pathway_enrich_file = open(pathway_enrich_out,"a")
-		
+
 		pathway_out_file = open(pathway_enrich_out,"a")
-		
+
 		for entry in open(''.join(target_id_file), "r"):
 			uni_line = entry.rstrip("\n")
 			uni_lines = uni_line.split("\t")
 			if uni_lines not in target_list:
 				target_list.append(uni_lines)
-		
+
 		with open(background_file,"r") as back:
 			next(back)
 			for entry in back:
@@ -30,15 +31,18 @@ class Pathway_analysis(object):
 				associate_map_desc[uni_lines[1]] = uni_lines[2]
 				if uni_lines[0] not in background_list:
 					background_list.append(uni_lines[0])
-		
+
+		for entry in target_list:
+			entry_str =''.join(entry)
+			if entry_str in background_list:
+				target_no = target_no + 1
+				
 		count_obj = count()
-		background_term = count_obj.count_terms(background_list,
-											associate_id_map)
-		target_term = count_obj.count_terms(target_list,
-											associate_id_map)
-		
+		background_term = count_obj.count_terms(background_list,associate_id_map)
+		target_term = count_obj.count_terms(target_list,associate_id_map)
+
 		background_no = len(background_list)
-		target_no = len(target_list)
+		#target_no = len(target_list)
 		pathway_enrich_file.write("KEGG pathway term"+ "\t" + "pathway description" \
 						  + "\t" + "target number" + "\t" + "total target numbers" \
 						  + "\t" + "ratio of  targets" + "\t" + "background_number" \
@@ -56,20 +60,20 @@ class Pathway_analysis(object):
 				+ str(target_count) + "\t" + str(target_no) + "\t" \
 				+ str(ratio_target) + "\t" + str(background_count) + "\t" \
 				+ str(background_no) + "\t" + str(ratio_background) + "\t" + str(pvalue) + "\n")
-		
+
 class count(object):
 	def count_terms(self, geneset, assoc):
 		term_cnt = collections.defaultdict(int)
 		self.assoc = assoc
-		for 	each_gene in geneset:
+		for each_gene in geneset:
 			each_gene_str = ''.join(each_gene)
 			if each_gene_str in assoc:
 				term_cnt[assoc[each_gene_str]] += 1
-					
+
 		return term_cnt
-			
-		
-			
-		
-		
-		
+
+
+
+
+
+
