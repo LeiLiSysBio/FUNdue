@@ -9,6 +9,7 @@ from traplfunlib.gff3 import Gff3Parser
 from traplfunlib.go_enrich import goenrichanalysis
 from traplfunlib.retrievepathway import Retrievepathway
 from traplfunlib.pathway_enrich import Pathway_analysis
+from traplfunlib.blast2go import blast2go_analysis
 
 
 class Controller(object):
@@ -25,7 +26,17 @@ class Controller(object):
         project_creator.create_version_file(self._paths.version_path,version)
         sys.stdout.write("Created folder \"%s\" and required subfolders. \n" %(
             self._args.project_path))
-
+    
+    def blast2go(self):
+        self._test_folder_existance(
+            self._paths.required_input_folders())
+        blast2go_file = self._paths.get_blast2go_files()
+        blast2go_path = self._paths.set_blast2go_id_paths(blast2go_file)
+        blast2go = blast2go_analysis()
+        for blast2go_single_file in blast2go_path:
+            blast2go.run_blast2go(self._paths.blast2go_path,
+                    blast2go_single_file, self._paths.go_background_list_path)
+        
     def go_terms(self):
         self._test_folder_existance(
             self._paths.required_go_folders())

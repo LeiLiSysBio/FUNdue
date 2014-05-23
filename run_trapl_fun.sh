@@ -7,7 +7,8 @@ main(){
 	
 	# create_folders
 	# set_up_analysis_folder
-	 get_gff_files
+	# get_gff_files
+	 run_blast2go
 	# run_retrieveGO
 	# run_go_enrichment_analysis
 	# run_retrievepathway
@@ -40,6 +41,17 @@ get_gff_files(){
     echo "----------------------------------------"
     echo "Content of" $TRAPL_FUN_FOLDER/input/annotations/
     ls -l $TRAPL_FUN_FOLDER/input/annotations/
+}
+
+run_blast2go(){
+	if ! [ -f ${TRAPL_FUN_FOLDER}/input/blast2go_xml/* ]
+	then
+		echo "Please provide the blast xml file"
+	else
+		$PYTHON_PATH $TRAPL_FUN_PATH \
+		blast2go \
+		$TRAPL_FUN_FOLDER
+	fi
 }
 
 run_retrieveGO(){

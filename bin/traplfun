@@ -22,7 +22,16 @@ def main():
     create_project_parser.add_argument(
         "project_path", default=".", help="Name/path of the project.")
     create_project_parser.set_defaults(func=create_project)
-
+    
+    # Parameters for blast2go
+    blast2go_parser = subparsers.add_parser(
+        "blast2go", help = "Run blast2go")
+    blast2go_parser.add_argument(
+        "project_path", default=".",nargs="?",
+        help="Path of the project folder. If none is given the current "
+        "directory is used.")
+    blast2go_parser.set_defaults(func=blast2go)
+    
     # Parameters for go retrieve
     go_retrieving_parser = subparsers.add_parser(
         "retrieve", help = "Run go term retrieve")
@@ -74,6 +83,9 @@ def main():
 def create_project(controller):
     controller.create_project(__version__)
 
+def blast2go(controller):
+    controller.blast2go()
+    
 def go_terms(controller):
     controller.go_terms()
 

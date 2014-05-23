@@ -17,16 +17,13 @@ class Paths(object):
     def _set_input_folder_names(self):
         self.annotation_folder = "%s/annotations" % self.input_folder
         self.target_id_folder = "%s/target_ids" % self.input_folder
+        self.blast2go_folder = "%s/blast2go_xml" % self.input_folder
 
     def _set_go_folder_names(self):
         self.go_base_folder = "%s/gene_ontology" % self.output_folder
-        #self.go_target_list_folder = "%s/target_id_go/" % self.go_base_folder
         self.go_background_folder = "%s/background_go/" % self.go_base_folder
         self.go_enrich_folder = "%s/go_enrichment/" % self.go_base_folder
         self.go_viz_folder = "%s/go_viz/" % self.go_base_folder
-        #self.go_target_list_path = (
-        #    "%s/target_id_go.txt" %
-        #    self.go_target_list_folder)
         self.go_background_list_path = (
             "%s/background_go.csv" %
             self.go_background_folder)
@@ -51,6 +48,7 @@ class Paths(object):
         self.uniprot_id_mapping_path = "/storage2/lei/Project/TRAPL_FUN/UniprotKB_GO/idmapping_selected.tab"
         self.go_ontology_obo_path = "/storage2/lei/Project/TRAPL_FUN/gene_ontology.1_2.obo"
         self.build_pathway_path = "bin/traplfunlib/buildpathwayDB.R"
+        self.blast2go_path = "bin/b2g4pipe"
 
     def required_folders(self):
         return(self.required_base_folders() +
@@ -62,7 +60,8 @@ class Paths(object):
         return [self.input_folder, self.output_folder]
 
     def required_input_folders(self):
-        return [self.annotation_folder,self.target_id_folder]
+        return [self.annotation_folder, self.target_id_folder,
+                self.blast2go_folder]
 
     def required_go_folders(self):
         return [self.go_base_folder,self.go_enrich_folder,
@@ -86,7 +85,10 @@ class Paths(object):
     def get_target_id_files(self):
         """Read the names of target id files."""
         return self._get_sorted_folder_content(self.target_id_folder)
-
+    
+    def get_blast2go_files(self):
+        return self._get_sorted_folder_content(self.blast2go_folder)
+    
     def set_annotation_paths(self, annotation_files):
         return self._path_list(
             self.annotation_folder, annotation_files)
@@ -94,6 +96,10 @@ class Paths(object):
     def set_target_id_paths(self, target_id_files):
         return self._path_list(
             self.target_id_folder,target_id_files)
+            
+    def set_blast2go_id_paths(self, blast2go_id_files):
+        return self._path_list(
+            self.blast2go_folder, blast2go_id_files)
 
     def _path_list(self, folder, files, appendix=""):
         return ["%s/%s%s" % (folder, file, appendix) for file in files]
