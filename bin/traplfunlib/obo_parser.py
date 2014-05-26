@@ -152,7 +152,6 @@ class GODag(dict):
 
     def load_obo_file(self, obo_file):
 
-        print("parsing the gene ontology file %s" % obo_file)
         obo_reader = OBOReader(obo_file)
         for rec in obo_reader:
             self[rec.id] = rec

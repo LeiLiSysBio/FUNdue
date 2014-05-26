@@ -71,6 +71,15 @@ def main():
         "directory is used")
     kegg_enrich_parser.set_defaults(func=pathway_stat)
     
+    # Parameters for go visulization 
+    go_viz_parser = subparsers.add_parser(
+        "go_viz", help = "Run go viz")
+    go_viz_parser.add_argument(
+        "project_path", default=".",nargs="?",
+        help="Path of the project folder. If none is given, the current"
+        "directory is used")
+    go_viz_parser.set_defaults(func=go_viz)
+    
     args = parser.parse_args()
     if args.version is True:
         print("TRAPL_FUN_version " + __version__)
@@ -97,5 +106,8 @@ def go_stat(controller):
 
 def pathway_stat(controller):
     controller.pathway_stat()
+    
+def go_viz(controller):
+    controller.go_viz()
     
 main()

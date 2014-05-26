@@ -7,6 +7,7 @@
 Mainly used for functional annotation of transcriptome data, but it can be broadly used in any other high-throughput sequencing data. 
 
 ### Version 0.2 ###
+Add the go viz result for displaying results in http://revigo.irb.hr/ 
 
 New blast2go function
 

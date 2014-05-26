@@ -8,9 +8,10 @@ main(){
 	# create_folders
 	# set_up_analysis_folder
 	# get_gff_files
-	 run_blast2go
+	# run_blast2go
 	# run_retrieveGO
 	# run_go_enrichment_analysis
+	 run_viz_go
 	# run_retrievepathway
 	# run_pathway_enrichment_analysis
 	# generate_package_to_send
@@ -71,6 +72,12 @@ run_go_enrichment_analysis(){
 	$PYTHON_PATH $TRAPL_FUN_PATH \
 	go_stat \
 	$TRAPL_FUN_FOLDER	
+}
+
+run_viz_go(){
+	$PYTHON_PATH $TRAPL_FUN_PATH \
+	go_viz \
+	$TRAPL_FUN_FOLDER
 }
 
 run_pathway_enrichment_analysis(){

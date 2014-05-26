@@ -30,6 +30,9 @@ class Paths(object):
         self.go_enrich_list_path = (
             "%s/go_term_stat.csv" %
             self.go_enrich_folder)
+        self.go_viz_list_path = (
+            "%s/go_viz_revigo.txt" %
+            self.go_viz_folder)
 
     def _set_kegg_folder_names(self):
         self.kegg_base_folder = "%s/pathway/" % self.output_folder

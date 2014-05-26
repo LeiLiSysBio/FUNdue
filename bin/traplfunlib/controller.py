@@ -10,6 +10,7 @@ from traplfunlib.go_enrich import goenrichanalysis
 from traplfunlib.retrievepathway import Retrievepathway
 from traplfunlib.pathway_enrich import Pathway_analysis
 from traplfunlib.blast2go import blast2go_analysis
+from traplfunlib.go_viz import Goviz
 
 
 class Controller(object):
@@ -93,6 +94,11 @@ class Controller(object):
                                             self._paths.kegg_background_list_path,
                                             self._paths.kegg_enrich_list_path)
         
+    def go_viz(self):
+        go_viz_object = Goviz()
+        open(self._paths.go_viz_list_path,"w").close()
+        go_viz_object.go_viz(self._paths.go_enrich_list_path,
+                        self._paths.go_viz_list_path)
     
     def _test_folder_existance(self, task_specific_folders):
         for folder in (
