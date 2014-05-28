@@ -71,16 +71,21 @@ class Controller(object):
         
         
     def go_stat(self):
-        target_id_file = self._paths.get_target_id_files()
-        target_id_paths = self._paths.set_target_id_paths(target_id_file)
+        target_id_files = self._paths.get_target_id_files()
+        target_id_paths = self._paths.set_target_id_paths(target_id_files)
         self._test_folder_existance(target_id_paths)
         goterm_analysis = goenrichanalysis()
 
         open(self._paths.go_enrich_list_path,"w").close()
-        goterm_analysis.go_enrichment(target_id_paths,
-                                      self._paths.go_background_list_path,
-                                      self._paths.go_ontology_obo_path,
-                                      self._paths.go_enrich_list_path)
+        for target_id_each_file in target_id_paths:
+            target_id_filename = os.path.basename(target_id_each_file)
+            go_enrich_each_file = self._paths.go_enrich_folder + '/' + \
+                                        target_id_filename + '_' + \
+                                        "go_stat.txt"
+            goterm_analysis.go_enrichment(target_id_each_file,
+                                    self._paths.go_background_list_path,
+                                    self._paths.go_ontology_obo_path,
+                                    go_enrich_each_file)
 
 
     def pathway_stat(self):

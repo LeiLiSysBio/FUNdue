@@ -11,9 +11,10 @@ main(){
 	# run_blast2go
 	# run_retrieveGO
 	# run_go_enrichment_analysis
-	 run_viz_go
+	# run_viz_go
 	# run_retrievepathway
 	# run_pathway_enrichment_analysis
+	# run_viz_pathway
 	# generate_package_to_send
  	# compress_files
 }
