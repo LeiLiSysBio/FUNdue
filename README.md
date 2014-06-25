@@ -11,8 +11,11 @@ Welcome for your comments
 
 ### Version 0.2 ###
 Add the output for FDR (false discovery rate)
+
 Remove top gene ontology nodes
+
 Add the ontologies column for output
+
 fix visualisation issues 
 
 ### Version 0.15 ###
