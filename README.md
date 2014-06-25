@@ -6,7 +6,16 @@
 * Quick summary
 Mainly used for functional annotation of transcriptome data, but it can be broadly used in any other high-throughput sequencing data. 
 
+### Waiting list ###
+Welcome for your comments
+
 ### Version 0.2 ###
+Add the output for FDR (false discovery rate)
+Remove top gene ontology nodes
+Add the ontologies column for output
+fix visualisation issues 
+
+### Version 0.15 ###
 Allow input multiple target files
 
 Add the go viz result for displaying results in http://revigo.irb.hr/ 
@@ -21,22 +30,11 @@ For the pathway analysis, you need paste a list of locus\_tag IDs
 
 ### How do I get set up? ###
 
-* Summary of set up
-* Configuration
 * Dependencies
 ** Python modules (scipy)
 ** R modules (KEGGREST,getopt)
-* Database configuration
-* How to run tests
-* Deployment instructions
 
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
 
 ### Who do I talk to? ###
 
-* Repo owner or admin
-* Other community or team contact
+* Talk with me directly

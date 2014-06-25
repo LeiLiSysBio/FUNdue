@@ -2,7 +2,6 @@ from traplfunlib.paths import Paths
 
 class Goviz(object):
 	"""Uses mapping to detect the go terms"""
-	"""For the gene not found in uniprot, using blast2go"""
 
 	def go_viz(self, enrichment_file, viz_revigo):
 		viz_revigo_file = open(viz_revigo,"a")
@@ -15,6 +14,6 @@ class Goviz(object):
 			for entry in go_enrich:
 				uni_line = entry.rstrip("\n")
 				uni_lines = uni_line.split("\t")
-				if float(uni_lines[8]) <= 0.1:
-					viz_revigo_file.write(uni_lines[0] + "\t" + uni_lines[8] + "\n")
+				if float(uni_lines[9]) <= 0.1:
+					viz_revigo_file.write(uni_lines[0] + "\t" + uni_lines[9] + "\n")
 		

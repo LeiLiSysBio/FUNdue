@@ -2,6 +2,7 @@ import sys
 from scipy import stats
 import collections
 from traplfunlib.obo_parser import GODag
+import random
 
 
 class goenrichanalysis(object):
@@ -47,24 +48,81 @@ class goenrichanalysis(object):
 
         background_no = len(background_list)
         #target_no = len(target_list)
-        go_out_file.write("Gene ontology term"+ "\t" + "ontology description" \
+        go_out_file.write("Gene ontology term"+ "\t" + "ontology description" + "\t"+ "ontologies"\
                           + "\t" + "target number" + "\t" + "total target numbers" \
                           + "\t" + "ratio of  targets" + "\t" + "background_number" \
                           + "\t" + "total background numbers" + "\t" + "ratio of background" \
-                          + "\t" + "pvalue" +"\n")
+                          + "\t" + "pvalue" + "\t" + "FDR (False discovery rate)" + "\n")
+        pvals = {}
+        print("calculating the FDR (false discovery rate) may take for a while, please wait...")
+        num = 0
         for term, target_count in target_term.items():
-            background_count = background_term[term]
-            target_other = target_no - target_count
-            background_other = background_no - background_count
-            oddsratio, pvalue = stats.fisher_exact([[target_count,target_other],
-                                                    [background_count,background_other]])
-            ratio_target = float(target_count) / float(target_no)
-            ratio_background = float(background_count) / float(background_no)
-            go_out_file.write(term + "\t" + go_obo[term].name + "\t" + str(target_count)
-                + "\t" + str(target_no) + "\t" + str(ratio_target) + "\t"
-                + str(background_count) + "\t" + str(background_no) + "\t"
-                + str(ratio_background) + "\t" + str(pvalue) + "\n")
+            if term == "GO:0003674|GO:0008150|GO:0005575":
+                pass
+            else:
+                num = num + 1
+                print("the "+ str(num) +" term is processing")
+                background_count = background_term[term]
+                target_other = target_no - target_count
+                background_other = background_no - background_count
+                oddsratio, pvalue = stats.fisher_exact([[target_count,target_other],
+                                        [background_count,background_other]])
+                ratio_target = float(target_count) / float(target_no)
+                ratio_background = float(background_count) / float(background_no)
+                #pvals[term] = pvalue
+                         
+                ## Calculate FDR (FalseDiscoveryRate) Random select the same number of clusters
+                ## And calculate the probability of p less than original one
+                distribution = []
+                for i in range(100):
+                    new_target = random.sample(background_list, target_no)
+                    new_term_study = count_obj.count_terms(new_target, association_list, go_obo)
+                    min_p = 1
+                    if term in new_term_study:
+                        new_target_other = target_no - new_term_study[term]
+                        new_background_count = background_term[term]
+                        new_background_other = background_no - new_background_count
+                        new_odd, p = stats.fisher_exact([[new_term_study[term], new_target_other],
+                                        [new_background_count, new_background_other]])
+                        if p < min_p:
+                            min_p = p
+                        distribution.append(min_p)
+                sum = 0
+                for random_p in distribution:
+                    if random_p < pvalue:
+                        sum = sum + 1
+                fdr_adjust_p = float(sum)/len(distribution)
+                go_out_file.write(term + "\t" + go_obo[term].name + "\t"+ go_obo[term].namespace +"\t" + str(target_count)
+                    + "\t" + str(target_no) + "\t" + str(ratio_target) + "\t"
+                    + str(background_count) + "\t" + str(background_no) + "\t"
+                    + str(ratio_background) + "\t" + str(pvalue) + "\t"
+                    + str(fdr_adjust_p) + "\n")
+        print("Welcome for your comments...")          
+class FDR(object):
+    def __init__(self, p_val_distribution, results, a=.05):
+        self.corrected_pvals = fdr = []
+        for rec in results:
+            q = (sum(1 for x in p_val_distribution if x < rec.p_uncorrected) \
+                * 1.0 / len(p_val_distribution))
+            fdr.append(q)
+ 
+#class Bonferroni(Correction):
+#    def set_correction(self):
+#        self.corrected_pvals *= self.n
 
+#class AbstractCorrection(object):
+#    def __init__(self, pvals, a=.05):
+#        self.pvals = self.corrected_pvals = np.array(pvals)
+#        self.n = len(self.pvals)    # number of multiple tests
+#        self.a = a                  # type-1 error cutoff for each test
+
+#        self.set_correction()
+
+#    def set_correction(self):
+        # the purpose of multiple correction is to lower the alpha
+        # instead of the canonical value (like .05)
+#        pass
+    
 class count(object):
     def count_terms(self, geneset, assoc, obo_dag):
       term_cnt = collections.defaultdict(int)

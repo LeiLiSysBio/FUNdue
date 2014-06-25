@@ -7,7 +7,7 @@ from traplfunlib.controller import Controller
 
 __author__ = "Lei Li <leili.bioinfo@gmail.com>"
 __copyright__ = "2014 by Lei Li"
-__version__ = "0.1"
+__version__ = "0.2"
 
 def main():
     parser = argparse.ArgumentParser()
@@ -60,6 +60,8 @@ def main():
         "project_path", default=".", nargs="?",
         help="Path of the project folder. If none is given the current"
         "directory is used.")
+    go_enrich_parser.add_argument(
+        "--fdr", "-f" , help = "false discovery rate option")
     go_enrich_parser.set_defaults(func=go_stat)
     
     # Parameters for pathway enrichment analysis

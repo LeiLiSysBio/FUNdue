@@ -82,6 +82,7 @@ class Controller(object):
             go_enrich_each_file = self._paths.go_enrich_folder + '/' + \
                                         target_id_filename + '_' + \
                                         "go_stat.txt"
+            open(go_enrich_each_file,"w").close()
             goterm_analysis.go_enrichment(target_id_each_file,
                                     self._paths.go_background_list_path,
                                     self._paths.go_ontology_obo_path,
@@ -102,8 +103,19 @@ class Controller(object):
     def go_viz(self):
         go_viz_object = Goviz()
         open(self._paths.go_viz_list_path,"w").close()
-        go_viz_object.go_viz(self._paths.go_enrich_list_path,
-                        self._paths.go_viz_list_path)
+        target_id_files = self._paths.get_target_id_files()
+        target_id_paths = self._paths.set_target_id_paths(target_id_files)
+        for target_id_each_file in target_id_paths:
+            target_id_filename = os.path.basename(target_id_each_file)
+            go_enrich_each_file = self._paths.go_enrich_folder + '/' + \
+                                    target_id_filename + '_' + \
+                                    "go_stat.txt"
+            go_viz_each_file = self._paths.go_viz_folder + '/' + \
+                                    target_id_filename + '_' + \
+                                    "go_viz_revigo.txt"
+            open(go_viz_each_file,"w").close()
+            go_viz_object.go_viz(go_enrich_each_file,
+                            go_viz_each_file)
     
     def _test_folder_existance(self, task_specific_folders):
         for folder in (
