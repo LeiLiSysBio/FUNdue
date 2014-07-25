@@ -10,11 +10,12 @@ main(){
 	# get_gff_files
 	# run_blast2go
 	# run_retrieveGO
-	 run_go_enrichment_analysis
+	# run_go_enrichment_analysis
 	# run_viz_go
 	# run_retrievepathway
 	# run_pathway_enrichment_analysis
 	# run_viz_pathway
+	run_gsea_analysis
 	# generate_package_to_send
  	# compress_files
 }
@@ -85,6 +86,12 @@ run_viz_go(){
 run_pathway_enrichment_analysis(){
 	$PYTHON_PATH $TRAPL_FUN_PATH \
 	pathway_stat \
+	$TRAPL_FUN_FOLDER	
+}
+
+run_gsea_analysis(){
+	$PYTHON_PATH $TRAPL_FUN_PATH \
+	gsea \
 	$TRAPL_FUN_FOLDER	
 }
 

@@ -7,7 +7,7 @@ from traplfunlib.controller import Controller
 
 __author__ = "Lei Li <leili.bioinfo@gmail.com>"
 __copyright__ = "2014 by Lei Li"
-__version__ = "0.2"
+__version__ = "0.3"
 
 def main():
     parser = argparse.ArgumentParser()
@@ -82,6 +82,15 @@ def main():
         "directory is used")
     go_viz_parser.set_defaults(func=go_viz)
     
+    # Parameters for gsea analysis
+    gsea_enrich_parser = subparsers.add_parser(
+        "gsea", help = "Run GSEA analysis")
+    gsea_enrich_parser.add_argument(
+        "project_path", default=".", nargs="?",
+        help="Path of the project folder. If none is given, the current"
+        "directory is used")
+    gsea_enrich_parser.set_defaults(func=gsea)
+
     args = parser.parse_args()
     if args.version is True:
         print("TRAPL_FUN_version " + __version__)
@@ -111,5 +120,8 @@ def pathway_stat(controller):
     
 def go_viz(controller):
     controller.go_viz()
+    
+def gsea(controller):
+    controller.gsea()
     
 main()

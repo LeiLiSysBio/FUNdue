@@ -11,6 +11,7 @@ from traplfunlib.retrievepathway import Retrievepathway
 from traplfunlib.pathway_enrich import Pathway_analysis
 from traplfunlib.blast2go import blast2go_analysis
 from traplfunlib.go_viz import Goviz
+from traplfunlib.gsea import GSEA_analysis
 
 
 class Controller(object):
@@ -117,6 +118,18 @@ class Controller(object):
             go_viz_object.go_viz(go_enrich_each_file,
                             go_viz_each_file)
     
+    def gsea(self):
+        gsea_object=GSEA_analysis()
+        expression_files = self._paths.get_expression_files()
+        expression_paths = self._paths.set_expression_paths(expression_files)
+        for expression_single_file in expression_paths:
+            expression_filename = os.path.basename(expression_single_file)
+            expression_filepath = self._paths.gsea_base_folder + "/" + \
+                                expression_filename
+            gsea_object.gsea(self._paths.gsa_path, expression_single_file, \
+                self._paths.go_background_list_path, \
+                self._paths.go_ontology_obo_path, expression_filepath)
+            
     def _test_folder_existance(self, task_specific_folders):
         for folder in (
             self._paths.required_base_folders() + task_specific_folders):

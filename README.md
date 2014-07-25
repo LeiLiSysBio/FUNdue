@@ -7,7 +7,11 @@
 Mainly used for functional annotation of transcriptome data, but it can be broadly used in any other high-throughput sequencing data. 
 
 ### Waiting list ###
+
 Welcome for your comments
+
+### Version 0.3 ###
+Add function for Gene Set Analysis
 
 ### Version 0.2 ###
 Add the output for FDR (false discovery rate)
@@ -35,7 +39,10 @@ For the pathway analysis, you need paste a list of locus\_tag IDs
 
 * Dependencies
 ** Python modules (scipy)
-** R modules (KEGGREST,getopt)
+** R modules (KEGGREST,getopt, piano, optparse)
+** install methods
+source("http://bioconductor.org/biocLite.R")
+biocLite()
 
 
 ### Who do I talk to? ###

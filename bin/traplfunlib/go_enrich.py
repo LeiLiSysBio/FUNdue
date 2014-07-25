@@ -74,7 +74,7 @@ class goenrichanalysis(object):
                 ## Calculate FDR (FalseDiscoveryRate) Random select the same number of clusters
                 ## And calculate the probability of p less than original one
                 distribution = []
-                for i in range(100):
+                for i in range(500):
                     new_target = random.sample(background_list, target_no)
                     new_term_study = count_obj.count_terms(new_target, association_list, go_obo)
                     min_p = 1
@@ -91,7 +91,10 @@ class goenrichanalysis(object):
                 for random_p in distribution:
                     if random_p < pvalue:
                         sum = sum + 1
-                fdr_adjust_p = float(sum)/len(distribution)
+                if len(distribution) == 0:
+                    fdr_adjust_p = float(sum)
+                else:
+                    fdr_adjust_p = float(sum)/len(distribution)
                 go_out_file.write(term + "\t" + go_obo[term].name + "\t"+ go_obo[term].namespace +"\t" + str(target_count)
                     + "\t" + str(target_no) + "\t" + str(ratio_target) + "\t"
                     + str(background_count) + "\t" + str(background_no) + "\t"
