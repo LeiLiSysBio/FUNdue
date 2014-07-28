@@ -8,7 +8,7 @@ import random
 class goenrichanalysis(object):
     """Gene ontolgoy enrichment analysis"""
     def go_enrichment(self,target_id_file, background_file, obo_file_path, go_enrich_out):
-
+        timer = time.clock()
         target_list = []
         background_list = []
         target_no = 0
@@ -100,7 +100,8 @@ class goenrichanalysis(object):
                     + str(background_count) + "\t" + str(background_no) + "\t"
                     + str(ratio_background) + "\t" + str(pvalue) + "\t"
                     + str(fdr_adjust_p) + "\n")
-        print("Welcome for your comments...")          
+        print("# %0.2f seconds process time" % (time.clock() - timer))        
+
 class FDR(object):
     def __init__(self, p_val_distribution, results, a=.05):
         self.corrected_pvals = fdr = []
@@ -109,23 +110,14 @@ class FDR(object):
                 * 1.0 / len(p_val_distribution))
             fdr.append(q)
  
-#class Bonferroni(Correction):
-#    def set_correction(self):
-#        self.corrected_pvals *= self.n
+class Bonferroni(Correction):
+    def __init__(self,pvals, a=0.05):
+        self.pvals = self.corrected_pvals = np.array(pvals)
+        self.n = len(self.pvals)
+        self.a = a
+    def set_correction(self):
+        self.corrected_pvals *= self.n
 
-#class AbstractCorrection(object):
-#    def __init__(self, pvals, a=.05):
-#        self.pvals = self.corrected_pvals = np.array(pvals)
-#        self.n = len(self.pvals)    # number of multiple tests
-#        self.a = a                  # type-1 error cutoff for each test
-
-#        self.set_correction()
-
-#    def set_correction(self):
-        # the purpose of multiple correction is to lower the alpha
-        # instead of the canonical value (like .05)
-#        pass
-    
 class count(object):
     def count_terms(self, geneset, assoc, obo_dag):
       term_cnt = collections.defaultdict(int)

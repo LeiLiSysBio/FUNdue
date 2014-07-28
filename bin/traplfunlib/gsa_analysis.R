@@ -187,7 +187,7 @@ gen.plot2report <- function(filename=NULL,
 #
 #############################################################
 #main program
-usage <- "irap_GSE_piano --tsv file --go file [options]"
+usage <- "Rprogram --tsv file --go file [options]"
 option_list <- list(
   make_option(c("-a", "--annotation"), type="character",default=NULL,help="Annotation file (TSV format)"),
   make_option(c("--annotation_col"), type="character",default="GOterm",help="Column in the annotation file [default %default]"),
