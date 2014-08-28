@@ -14,6 +14,7 @@ class Paths(object):
         self._set_go_folder_names()
         self._set_kegg_folder_names()
         self._set_gsea_folder_names()
+        self._set_clustering_folder_names()
 
     def _set_input_folder_names(self):
         self.annotation_folder = "%s/annotations" % self.input_folder
@@ -49,6 +50,9 @@ class Paths(object):
             "%s/pathway_stat.csv" %
             self.kegg_enrich_folder)
         
+    def _set_clustering_folder_names(self):
+        self.clustering_base_folder = "%s/clustering_analysis/" % self.output_folder
+             
     def _set_gsea_folder_names(self):
         self.gsea_base_folder = "%s/gene_set_analysis" % self.output_folder
          
@@ -65,7 +69,8 @@ class Paths(object):
                self.required_input_folders() +
                self.required_go_folders() +
                self.required_kegg_folders() + 
-               self.required_gsea_folders())
+               self.required_gsea_folders() +
+               self.required_clustering_folder())
 
     def required_base_folders(self):
         return [self.input_folder, self.output_folder]
@@ -82,6 +87,9 @@ class Paths(object):
         return [self.kegg_base_folder, self.kegg_background_folder,
                 self.kegg_enrich_folder, self.kegg_viz_folder]
     
+    def required_clustering_folder(self):
+        return [self.clustering_base_folder]
+        
     def required_gsea_folders(self):
         return [self.gsea_base_folder]
         

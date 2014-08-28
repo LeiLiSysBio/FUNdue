@@ -15,7 +15,8 @@ main(){
 	# run_retrievepathway
 	# run_pathway_enrichment_analysis
 	# run_viz_pathway
-	run_gsea_analysis
+	 run_clustering
+	# run_gsea_analysis
 	# generate_package_to_send
  	# compress_files
 }
@@ -87,6 +88,12 @@ run_pathway_enrichment_analysis(){
 	$PYTHON_PATH $TRAPL_FUN_PATH \
 	pathway_stat \
 	$TRAPL_FUN_FOLDER	
+}
+
+run_clustering(){
+	$PYTHON_PATH $TRAPL_FUN_PATH \
+	clustering \
+	$TRAPL_FUN_FOLDER
 }
 
 run_gsea_analysis(){

@@ -110,13 +110,13 @@ class FDR(object):
                 * 1.0 / len(p_val_distribution))
             fdr.append(q)
  
-class Bonferroni(Correction):
-    def __init__(self,pvals, a=0.05):
-        self.pvals = self.corrected_pvals = np.array(pvals)
-        self.n = len(self.pvals)
-        self.a = a
-    def set_correction(self):
-        self.corrected_pvals *= self.n
+#class Bonferroni(Correction):
+#    def __init__(self,pvals, a=0.05):
+#        self.pvals = self.corrected_pvals = np.array(pvals)
+#        self.n = len(self.pvals)
+#        self.a = a
+#    def set_correction(self):
+#        self.corrected_pvals *= self.n
 
 class count(object):
     def count_terms(self, geneset, assoc, obo_dag):

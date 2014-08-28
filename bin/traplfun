@@ -7,7 +7,7 @@ from traplfunlib.controller import Controller
 
 __author__ = "Lei Li <leili.bioinfo@gmail.com>"
 __copyright__ = "2014 by Lei Li"
-__version__ = "0.3"
+__version__ = "0.4"
 
 def main():
     parser = argparse.ArgumentParser()
@@ -22,7 +22,7 @@ def main():
     create_project_parser.add_argument(
         "project_path", default=".", help="Name/path of the project.")
     create_project_parser.set_defaults(func=create_project)
-    
+
     # Parameters for blast2go
     blast2go_parser = subparsers.add_parser(
         "blast2go", help = "Run blast2go")
@@ -31,7 +31,7 @@ def main():
         help="Path of the project folder. If none is given the current "
         "directory is used.")
     blast2go_parser.set_defaults(func=blast2go)
-    
+
     # Parameters for go retrieve
     go_retrieving_parser = subparsers.add_parser(
         "retrieve", help = "Run go term retrieve")
@@ -52,7 +52,7 @@ def main():
         "--code", "-c", required=True,
         help="KEGG organism code")
     kegg_retrieving_parser.set_defaults(func=kegg_terms)
-    
+
     # Parameters for go enrichment analysis
     go_enrich_parser = subparsers.add_parser(
         "go_stat", help = "Run go terms statistics")
@@ -63,7 +63,7 @@ def main():
     go_enrich_parser.add_argument(
         "--fdr", "-f" , help = "false discovery rate option")
     go_enrich_parser.set_defaults(func=go_stat)
-    
+
     # Parameters for pathway enrichment analysis
     kegg_enrich_parser = subparsers.add_parser(
         "pathway_stat", help= "Run pathway statistics")
@@ -72,8 +72,8 @@ def main():
         help="Path of the project folder. If none is given, the current"
         "directory is used")
     kegg_enrich_parser.set_defaults(func=pathway_stat)
-    
-    # Parameters for go visulization 
+
+    # Parameters for go visulization
     go_viz_parser = subparsers.add_parser(
         "go_viz", help = "Run go viz")
     go_viz_parser.add_argument(
@@ -81,7 +81,16 @@ def main():
         help="Path of the project folder. If none is given, the current"
         "directory is used")
     go_viz_parser.set_defaults(func=go_viz)
-    
+
+    # Parameters for clustering
+    clustering_parser = subparsers.add_parser(
+        "clustering", help = "Run clustering")
+    clustering_parser.add_argument(
+        "project_path", default=".", nargs="?",
+        help="Path of the project folder. If none is given, the current"
+        "directory is used")
+    clustering_parser.set_defaults(func=clustering)
+
     # Parameters for gsea analysis
     gsea_enrich_parser = subparsers.add_parser(
         "gsea", help = "Run GSEA analysis")
@@ -105,23 +114,26 @@ def create_project(controller):
 
 def blast2go(controller):
     controller.blast2go()
-    
+
 def go_terms(controller):
     controller.go_terms()
 
 def kegg_terms(controller):
     controller.kegg_terms()
-    
+
 def go_stat(controller):
     controller.go_stat()
 
 def pathway_stat(controller):
     controller.pathway_stat()
-    
+
 def go_viz(controller):
     controller.go_viz()
-    
+
+def clustering(controller):
+   controller.clustering()
+
 def gsea(controller):
     controller.gsea()
-    
+
 main()

@@ -9,6 +9,9 @@ Mainly used for functional annotation of transcriptome data, but it can be broad
 ### Waiting list ###
 
 Welcome for your comments
+### Version 0.4 ###
+Add Clustering analysis function
+input(expression folder)
 
 ### Version 0.3 ###
 Add function for Gene Set Analysis
