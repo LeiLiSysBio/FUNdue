@@ -7,7 +7,8 @@ import os
 
 class GSEA_analysis(object):
 	"""Perform gene set analysis"""
-	def gsea(self, gsea_script, expression_file, go_background_file, obo_file_path, prefix):
+	def gsea(self, gsea_script, expression_file,go_background_file, obo_file_path, prefix,\
+			method, minsize, minedge):
 		"""Expression files format gene_id log2foldchange pval"""
 		go_obo = GODag(obo_file_path)
 		tmp_gofile = tempfile.NamedTemporaryFile(mode="a",delete=False)
@@ -29,7 +30,7 @@ class GSEA_analysis(object):
 		with open(os.devnull, "w") as devnull:
 			call(["Rscript", gsea_script, \
 			"--tsv" , expression_file,"-p","2","-f","3", \
-			"-s","4","-e","4", \
+			"-s",str(minsize),"-e", str(minedge), "-m", method, \
 			"--go", tmp_gofile.name, "-o", prefix_go])
 		tmp_gofile.close()
 		

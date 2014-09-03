@@ -33,7 +33,6 @@ perror <- function(...) {
   cat(paste("[ERROR] ",...,"\n",sep=""),file=stderr())
 }
 write.tsv <- function(x,file,header=TRUE,rownames.label=NULL) {
-  #
   if (!is.null(x)) {
 	if (!is.matrix(x)) {
 	  x <- as.matrix(x)
@@ -63,7 +62,6 @@ gen.plot2report <- function(filename=NULL,
 
   if ( is.null(dir) ) {
 	if ( grepl("^/",filename) ) {
-	  # abspath
 	  dir <- ""
 	} else {
 	  dir <- "."
@@ -143,7 +141,6 @@ gen.plot2report <- function(filename=NULL,
 #main program
 usage <- "Rprogram --tsv file --go file [options]"
 option_list <- list(
-  make_option(c("--annotation_col"), type="character",default="GOterm",help="Column in the annotation file [default %default]"),
   make_option(c("-i", "--tsv"), type="character", dest="express.file", default=NULL,help="TSV file (gene ids should appear in the first column)"),
   make_option(c("-p", "--pvalue-col"), type="numeric", dest="pval.col", default=8,help="Column with the p-values [default %default]"),
   make_option(c("-f", "--foldchange-col"), type="numeric", dest="fold.col", default=5,help="Column with the foldchange values [default %default]"),
@@ -153,7 +150,6 @@ option_list <- list(
   make_option(c("-m", "--method"), type="character", dest="method", default="median",help="Method [default: %default]"),
   make_option(c("-e", "--minedge"), type="numeric", dest="minedge", default=3,help="Minimum number of genes (>1) shared between two gene sets (used only in the plots) [default: %default]"),
   make_option(c("-t", "--top"), type="numeric", dest="top", default=Inf,help="Top gene sets (>1) used in the plot [default: %default]"),
-  make_option(c("--plot-annot-only"),action="store_true",dest="plot.annot.only",default=FALSE,help="Plot  only genes with annotation [default %default]"),
   make_option(c("--go"), type="character", dest="go.file", default=NULL,help="TSV file with the mapping of the genes to GO terms (two columns file: geneid goterm)"),
   make_option(c("--title"), type="character", dest="title", default="",help="Main title to include in the plot"),
   make_option(c("-o", "--out"), type="character",default=NULL,help="Output file name prefix.")
@@ -163,7 +159,7 @@ multiple.options = list(method=c("mean","median","sum","fisher","stouffer","tail
 filenames <- c("express.file","go.file") ;
 
 mandatory <- c("express.file","out")
-opt <- myParseArgs(usage = usage, option_list=option_list,filenames.exist=filenames,multiple.options=multiple.options,mandatory=mandatory)
+opt <- myParseArgs(usage=usage, option_list=option_list,filenames.exist=filenames,multiple.options=multiple.options,mandatory=mandatory)
 
 pinfo("Parameters parsed.")
 
@@ -212,8 +208,6 @@ pinfo("annotation col=",opt$annotation_col)
 pinfo("...............................")
 ##############################################
 
-pinfo("Starting to play piano...")
-# exclude NAs
 pval <- pval[!is.na(pval)]
 fc <- fc[!is.na(fc)]
 pinfo("FC mean ",round(mean(abs(fc),na.rm=T),2),"+-",round(sd(fc,na.rm=T),2))
@@ -257,8 +251,8 @@ if ( length(set1)>=minSizeLim && print.empty==FALSE )  {
 	   }
 	   if ( ! opt$method %in% c("fisher","stouffer","reporter","tailStrength")) {
 		 gen.plot2report(filename=paste(opt$out,"_class_distinct_dir_both.png",sep=""),
-						 width=450,
-						 height=450,
+						 width=800,
+						 height=800,
 						 html=FALSE,
 						 ps=TRUE,
 						 to.plot = function () {

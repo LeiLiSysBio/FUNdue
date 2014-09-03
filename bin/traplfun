@@ -84,21 +84,45 @@ def main():
 
     # Parameters for clustering
     clustering_parser = subparsers.add_parser(
-        "clustering", help = "Run clustering")
+        "clustering", help = "Run clustering analysis")
     clustering_parser.add_argument(
         "project_path", default=".", nargs="?",
         help="Path of the project folder. If none is given, the current"
         "directory is used")
+    clustering_parser.add_argument(
+        "--rowmethod","-rd",default="average",type=str,
+        help="row clustering methods")
+    clustering_parser.add_argument(
+        "--rowmatrix","-rx",default="euclidean",type=str,
+        help="row clustering matrix")
+    clustering_parser.add_argument(
+        "--colmethod","-cd",default="average",type=str,
+        help="column clustering methods")
+    clustering_parser.add_argument(
+        "--colmatrix","-cx",default="euclidean",type=str,
+        help="column clustering matrix")
+    clustering_parser.add_argument(
+        "--color","-co",default="red_white_blue",type=str,
+        help="clustering color")
     clustering_parser.set_defaults(func=clustering)
 
     # Parameters for gsea analysis
-    gsea_enrich_parser = subparsers.add_parser(
+    gsea_parser = subparsers.add_parser(
         "gsea", help = "Run GSEA analysis")
-    gsea_enrich_parser.add_argument(
+    gsea_parser.add_argument(
         "project_path", default=".", nargs="?",
         help="Path of the project folder. If none is given, the current"
         "directory is used")
-    gsea_enrich_parser.set_defaults(func=gsea)
+    gsea_parser.add_argument(
+        "--method","-m", default="median", type=str,
+        help="methods for gene set analysis")
+    gsea_parser.add_argument(
+        "--minsize","-s", default="5", type=int,
+        help="Minimum size of a cluster")
+    gsea_parser.add_argument(
+        "--minedge","-e", default="3", type=int,
+        help="Minimum number of shared genes between two gene sets")
+    gsea_parser.set_defaults(func=gsea)
 
     args = parser.parse_args()
     if args.version is True:

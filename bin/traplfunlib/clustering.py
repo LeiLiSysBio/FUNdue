@@ -5,7 +5,7 @@ import matplotlib as mpl
 import scipy
 import scipy.cluster.hierarchy as sch
 import scipy.spatial.distance as dist
-import numpy
+import numpy as np
 import string
 import time
 import sys, os
@@ -13,9 +13,14 @@ import getopt
 
 ################# Perform the hierarchical clustering #################
 class cluster_analysis(object):   
-    def __init__(self,filename, expressionpath):
+    def __init__(self,filename, expressionpath, rowmethod, rowmatrix, colmethod, colmatrix, color):
         self._filename = filename
         self._expressionpath = expressionpath
+        self._rowmethod = rowmethod
+        self._rowmatrix = rowmatrix
+        self._colmethod = colmethod
+        self._colmatrix = colmatrix
+        self._color = color
                    
     def _importfromData(self,filename):
         matrix=[]
@@ -35,36 +40,24 @@ class cluster_analysis(object):
             else:
                 if ' ' not in t and '' not in t: ### Occurs for rows with missing data
                     s = list(map(float,t[1:]))
-                    print(s)
                     if (abs(max(s)-min(s)))>0:
                         matrix.append(s)
                         row_header.append(t[0])   
-        try:
-            print('\n%d rows and %d columns imported for %s...' % \
-                (len(matrix),len(column_header),dataset_name))
-        except Exception:
-            print('No data in input file.')
-        return numpy.array(matrix), column_header, row_header
+                        
+        return np.array(matrix), column_header, row_header
     
     def _heatmap(self, filematrix, row_header, column_header, row_method,
             column_method, row_metric, column_metric,
             color_gradient, filename):
         
-        print("\nPerforming hiearchical clustering using %s for columns and %s for rows" % (column_metric,row_metric))
         """x is an m by n ndarray, m observations, n genes"""
         ### Define the color gradient to use based on the provided name
         n = len(filematrix[0]) 
         m = len(filematrix)
         if color_gradient == 'red_white_blue':
             cmap=pylab.cm.bwr
-        if color_gradient == 'red_black_sky':
-            cmap=RedBlackSkyBlue()
-        if color_gradient == 'red_black_blue':
-            cmap=RedBlackBlue()
-        if color_gradient == 'red_black_green':
-            cmap=RedBlackGreen()
-        if color_gradient == 'yellow_black_blue':
-            cmap=YellowBlackBlue()
+        if color_gradient == 'yellow_red':
+            cmap=pylab.cm.YlOrRd
         if color_gradient == 'seismic':
             cmap=pylab.cm.seismic
         if color_gradient == 'green_white_purple':
@@ -85,8 +78,7 @@ class cluster_analysis(object):
     
         ## calculate positions for all elements
         # ax1, placement of dendrogram 1, on the left of the heatmap
-        #if row_method != None: w1 =
-        [ax1_x, ax1_y, ax1_w, ax1_h] = [0.05,0.22,0.2,0.6]   ### The second value controls the position of the matrix relative to the bottom of the view
+        [ax1_x, ax1_y, ax1_w, ax1_h] = [0.18,0.22,0.1,0.6]   ### The second value controls the position of the matrix relative to the bottom of the view
         width_between_ax1_axr = 0.004
         height_between_ax1_axc = 0.004 ### distance between the top color bar axis and the matrix
     
@@ -109,7 +101,7 @@ class cluster_analysis(object):
         axm_w = axc_w
     
         # ax2, placement of dendrogram 2, on the top of the heatmap
-        [ax2_x, ax2_y, ax2_w, ax2_h] = [0.3,0.72,0.6,0.15] ### last one controls hight of the dendrogram
+        [ax2_x, ax2_y, ax2_w, ax2_h] = [0.3,0.72,0.6,0.08] ### last one controls hight of the dendrogram
         ax2_x = axr_x + axr_w + width_between_axr_axm
         ax2_y = ax1_y + ax1_h + height_between_ax1_axc + axc_h + height_between_axc_ax2
         ax2_w = axc_w
@@ -118,42 +110,41 @@ class cluster_analysis(object):
         [axcb_x, axcb_y, axcb_w, axcb_h] = [0.07,0.88,0.18,0.09]
     
         # Compute and plot top dendrogram
-        print("column_method"+ "\t" + column_method)
-        if column_method != 'None':
+        if column_method.lower() != 'none':
             d2 = dist.pdist(filematrix.T)
             D2 = dist.squareform(d2)
             ax2 = fig.add_axes([ax2_x, ax2_y, ax2_w, ax2_h], frame_on=True)
             Y2 = sch.linkage(D2, method=column_method, metric=column_metric) ### array-clustering metric - 'average', 'single', 'centroid', 'complete'
-            Z2 = sch.dendrogram(Y2)
-            ind2 = sch.fcluster(Y2,0.5*max(Y2[:,2]),'distance') ### This is the default behavior of dendrogram
+            sch.set_link_color_palette(['black'])
+            Z2 = sch.dendrogram(Y2, color_threshold=np.inf)
+            ind2 = sch.fcluster(Y2,0.7*max(Y2[:,2]),'distance') ### This is the default behavior of dendrogram
             ax2.set_xticks([]) ### Hides ticks
             ax2.set_yticks([])
-            print('Column clustering completed')
         else:
             ind2 = ['NA']*len(column_header) ### Used for exporting the flat cluster data
     
         # Compute and plot left dendrogram.
-        if row_method != 'None':
+        if row_method.lower() != 'none':
             d1 = dist.pdist(filematrix)
             D1 = dist.squareform(d1)  # full matrix
             ax1 = fig.add_axes([ax1_x, ax1_y, ax1_w, ax1_h], frame_on=True) # frame_on may be False
-            Y1 = sch.linkage(D1, method=row_method, metric=row_metric) ### gene-clustering metric - 'average', 'single', 'centroid', 'complete'
-            Z1 = sch.dendrogram(Y1, orientation='right')
+            Y1 = sch.linkage(D1, method=row_method, metric=row_metric)
+            sch.set_link_color_palette(['black'])
+            Z1 = sch.dendrogram(Y1, color_threshold=np.inf, orientation='right')
             ind1 = sch.fcluster(Y1,0.7*max(Y1[:,2]),'distance') ### This is the default behavior of dendrogram
             ax1.set_xticks([]) ### Hides ticks
             ax1.set_yticks([])
-            print('Row clustering completed')
         else:
             ind1 = ['NA']*len(row_header) ### Used for exporting the flat cluster data
     
         # Plot distance matrix.
         axm = fig.add_axes([axm_x, axm_y, axm_w, axm_h])  # axes for the data matrix
         xt = filematrix
-        if column_method != 'None':
+        if column_method.lower() != 'none':
             idx2 = Z2['leaves'] ### apply the clustering for the array-dendrograms to the actual matrix data
             xt = xt[:,idx2]
             ind2 = [ind2[i] for i in idx2]
-        if row_method != 'None':
+        if row_method.lower() != 'none':
             idx1 = Z1['leaves'] ### apply the clustering for the gene-dendrograms to the actual matrix data
             xt = xt[idx1,:]   # xt is transformed x
             ind1 = [ind1[i] for i in idx1] ### reorder the flat cluster to match the order of the leaves the dendrogram
@@ -165,7 +156,7 @@ class cluster_analysis(object):
         new_row_header=[]
         new_column_header=[]
         for i in range(filematrix.shape[0]):
-            if row_method != 'None':
+            if row_method.lower() != 'none':
                 if len(row_header)<100: ### Don't visualize gene associations when more than 100 rows
                     axm.text(filematrix.shape[1]-0.5, i, '  '+row_header[idx1[i]])
                 new_row_header.append(row_header[idx1[i]])
@@ -174,7 +165,7 @@ class cluster_analysis(object):
                     axm.text(filematrix.shape[1]-0.5, i, '  '+row_header[i]) ### When not clustering rows
                 new_row_header.append(row_header[i])
         for i in range(filematrix.shape[1]):
-            if column_method != 'None':
+            if column_method.lower() != 'none':
                 axm.text(i, -0.9, ' '+column_header[idx2[i]], rotation=270, verticalalignment="top") # rotation could also be degrees
                 new_column_header.append(column_header[idx2[i]])
             else: ### When not clustering columns
@@ -183,10 +174,10 @@ class cluster_analysis(object):
     
         # Plot colside colors
         # axc --> axes for column side colorbar
-        if column_method != 'None':
+        if column_method.lower() != 'none':
             axc = fig.add_axes([axc_x, axc_y, axc_w, axc_h])  # axes for column side colorbar
             cmap_c = mpl.colors.ListedColormap(['r', 'g', 'b', 'y', 'w', 'k', 'm'])
-            dc = numpy.array(ind2, dtype=int)
+            dc = np.array(ind2, dtype=int)
             dc.shape = (1,len(ind2))
             im_c = axc.matshow(dc, aspect='auto', origin='lower', cmap=cmap_c)
             axc.set_xticks([]) ### Hides ticks
@@ -194,20 +185,19 @@ class cluster_analysis(object):
     
         # Plot rowside colors
         # axr --> axes for row side colorbar
-        if row_method != 'None':
+        if row_method.lower() != 'none':
             axr = fig.add_axes([axr_x, axr_y, axr_w, axr_h])  # axes for column side colorbar
-            dr = numpy.array(ind1, dtype=int)
+            dr = np.array(ind1, dtype=int)
             dr.shape = (len(ind1),1)
             #print ind1, len(ind1)
             cmap_r = mpl.colors.ListedColormap(['r', 'g', 'b', 'y', 'w', 'k', 'm'])
-            im_r = axr.matshow(dr, aspect='auto', origin='lower', cmap=cmap_r)
+            im_r = axr.matshow(dr, aspect='auto', origin='lower', cmap=cmap_c)
             axr.set_xticks([]) ### Hides ticks
             axr.set_yticks([])
     
         # Plot color legend
         axcb = fig.add_axes([axcb_x, axcb_y, axcb_w, axcb_h], frame_on=False)  # axes for colorbar
         cb = mpl.colorbar.ColorbarBase(axcb, cmap=cmap, norm=norm, orientation='horizontal')
-        axcb.set_title("colorkey")
     
         if '/' in filename:
             dataset_name = filename.split('/')[-1][:-4]
@@ -215,8 +205,8 @@ class cluster_analysis(object):
         #else:
             #dataset_name = filename.split('\\')[-1][:-4]
             #root_dir = string.join(string.split(filename,'\\')[:-1],'\\')+'\\'
-        filename = self._expressionpath+ 'hierarchical-Clustering-%s-_%s_%s.pdf' % (dataset_name,column_metric,row_metric)
-        cb.set_label("Enrichment factor (log2 fold)")
+        filename = self._expressionpath+ 'hierarchical-Clustering-%s-%s_%s.pdf' % (dataset_name,column_metric,row_metric)
+        cb.set_label("Enrichment factor")
         #self._exportFlatClusterData(filename, new_row_header,new_column_header,xt,ind1,ind2)
     
         ### Render the graphic
@@ -226,7 +216,7 @@ class cluster_analysis(object):
             pylab.rcParams['font.size'] = 8
     
         pylab.savefig(filename)
-        print('Exporting:',filename)
+        print('The clustering result can be found in',filename)
         filename = filename[:-3]+'png'
         pylab.savefig(filename, dpi=100) #,dpi=200
         pylab.show()
@@ -281,82 +271,15 @@ class cluster_analysis(object):
             i+=1
         export_cdt.close()
     
-    def RedBlackSkyBlue():
-        cdict = {'red':   ((0.0, 0.0, 0.0),
-                           (0.5, 0.0, 0.1),
-                           (1.0, 1.0, 1.0)),
-    
-                 'green': ((0.0, 0.0, 0.9),
-                           (0.5, 0.1, 0.0),
-                           (1.0, 0.0, 0.0)),
-    
-                 'blue':  ((0.0, 0.0, 1.0),
-                           (0.5, 0.1, 0.0),
-                           (1.0, 0.0, 0.0))
-                }
-    
-        my_cmap = matplotlib.colors.LinearSegmentedColormap('my_colormap',cdict,256)
-        return my_cmap
-    
-    def RedBlackBlue():
-        cdict = {'red':   ((0.0, 0.0, 0.0),
-                           (0.5, 0.0, 0.1),
-                           (1.0, 1.0, 1.0)),
-    
-                 'green': ((0.0, 0.0, 0.0),
-                           (1.0, 0.0, 0.0)),
-    
-                 'blue':  ((0.0, 0.0, 1.0),
-                           (0.5, 0.1, 0.0),
-                           (1.0, 0.0, 0.0))
-                }
-    
-        my_cmap = matplotlib.colors.LinearSegmentedColormap('my_colormap',cdict,256)
-        return my_cmap
-    
-    def RedBlackGreen():
-        cdict = {'red':   ((0.0, 0.0, 0.0),
-                           (0.5, 0.0, 0.1),
-                           (1.0, 1.0, 1.0)),
-    
-                 'blue': ((0.0, 0.0, 0.0),
-                           (1.0, 0.0, 0.0)),
-    
-                 'green':  ((0.0, 0.0, 1.0),
-                           (0.5, 0.1, 0.0),
-                           (1.0, 0.0, 0.0))
-                }
-    
-        my_cmap = matplotlib.colors.LinearSegmentedColormap('my_colormap',cdict,256)
-        return my_cmap
-    
-    def YellowBlackBlue():
-        cdict = {'red':   ((0.0, 0.0, 0.0),
-                           (0.5, 0.0, 0.1),
-                           (1.0, 1.0, 1.0)),
-    
-                 'green': ((0.0, 0.0, 0.8),
-                           (0.5, 0.1, 0.0),
-                           (1.0, 1.0, 1.0)),
-    
-                 'blue':  ((0.0, 0.0, 1.0),
-                           (0.5, 0.1, 0.0),
-                           (1.0, 0.0, 0.0))
-                }
-        ### yellow is created by adding y = 1 to RedBlackSkyBlue green last tuple
-        ### modulate between blue and cyan using the last y var in the first green tuple
-        my_cmap = matplotlib.colors.LinearSegmentedColormap('my_colormap',cdict,256)
-        return my_cmap
-        
+           
     def cluster(self):
         start_time = time.time()
-        #row_method = 'average'
-        row_method = 'average'
-        #column_method = 'complete'
-        column_method = 'None'
-        row_metric = 'cityblock'
-        column_metric = 'euclidean'
-        color_gradient = 'red_white_blue'
+        #euclidean,minkowski,cityblock, sequclidean, cosine, correlaiton, 
+        row_method = self._rowmethod
+        column_method = self._colmethod
+        row_metric = self._rowmatrix
+        column_metric = self._colmatrix
+        color_gradient = self._color
         matrix, column_header, row_header = self._importfromData(self._filename)
         time_diff = str(round(time.time()-start_time,1))
         if len(matrix)>0:
@@ -365,16 +288,8 @@ class cluster_analysis(object):
                 column_header, row_method, \
                 column_method, row_metric, \
                 column_metric, color_gradient, self._filename)
-            except Exception:
-                print('Error using %s ... trying euclidean instead.' % row_metric)
-                row_metric = 'euclidean'
-                try:
-                    self._heatmap(matrix, row_header, \
-                    column_header, row_method, \
-                    column_method, row_metric, \
-                    column_metric, color_gradient, self._filename)
-                except IOError:
-                    print('Error with clustering encountered')
+            except IOError:
+                print('Error with clustering encountered')
         
     
 
