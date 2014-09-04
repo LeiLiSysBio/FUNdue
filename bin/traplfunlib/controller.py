@@ -137,20 +137,21 @@ class Controller(object):
             cluster_object.cluster()
                 
     def gsea(self):
-        gsea_object=GSEA_analysis()
         expression_files = self._paths.get_expression_files()
         expression_paths = self._paths.set_expression_paths(expression_files)
         method = self._args.method
         minsize = self._args.minsize
         minedge = self._args.minedge
+        pvalue = self._args.pcol
+        foldchange = self._args.fcol
+        gsea_object=GSEA_analysis(pvalue,foldchange,method,minsize,minedge)
         for expression_single_file in expression_paths:
             expression_filename = os.path.basename(expression_single_file)
             expression_filepath = self._paths.gsea_base_folder + "/" + \
                                 expression_filename
             gsea_object.gsea(self._paths.gsa_path, expression_single_file, \
                 self._paths.go_background_list_path, \
-                self._paths.go_ontology_obo_path, expression_filepath, \
-                method, minsize, minedge)
+                self._paths.go_ontology_obo_path, expression_filepath)
             
     def _test_folder_existance(self, task_specific_folders):
         for folder in (

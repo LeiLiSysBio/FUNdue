@@ -114,6 +114,12 @@ def main():
         help="Path of the project folder. If none is given, the current"
         "directory is used")
     gsea_parser.add_argument(
+        "--pcol", "-p", default="2", type=int,
+        help="The pvalue column")
+    gsea_parser.add_argument(
+        "--fcol","-c",default="3", type=int,
+        help="The log fold change column")
+    gsea_parser.add_argument(
         "--method","-m", default="median", type=str,
         help="methods for gene set analysis")
     gsea_parser.add_argument(

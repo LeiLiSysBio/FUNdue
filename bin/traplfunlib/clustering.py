@@ -13,7 +13,7 @@ import getopt
 
 ################# Perform the hierarchical clustering #################
 class cluster_analysis(object):   
-    def __init__(self,filename, expressionpath, rowmethod, rowmatrix, colmethod, colmatrix, color):
+    def __init__(self,filename, expressionpath, rowmethod, rowmatrix, colmethod, colmatrix, color, idcol):
         self._filename = filename
         self._expressionpath = expressionpath
         self._rowmethod = rowmethod
@@ -21,6 +21,7 @@ class cluster_analysis(object):
         self._colmethod = colmethod
         self._colmatrix = colmatrix
         self._color = color
+        self._idcol = idcol
                    
     def _importfromData(self,filename):
         matrix=[]
@@ -58,6 +59,8 @@ class cluster_analysis(object):
             cmap=pylab.cm.bwr
         if color_gradient == 'yellow_red':
             cmap=pylab.cm.YlOrRd
+        if color_gradient == 'red_black_green':
+            cmap=self._RedBlackGreen()
         if color_gradient == 'seismic':
             cmap=pylab.cm.seismic
         if color_gradient == 'green_white_purple':
@@ -235,6 +238,22 @@ class cluster_analysis(object):
         else:
             return vmax,vmin
     
+    def _RedBlackGreen(self):
+        cdict = {'red':   ((0.0, 0.0, 0.0),
+                           (0.5, 0.0, 0.1),
+                           (1.0, 1.0, 1.0)),
+    
+                 'blue': ((0.0, 0.0, 0.0),
+                           (1.0, 0.0, 0.0)),
+    
+                 'green':  ((0.0, 0.0, 1.0),
+                           (0.5, 0.1, 0.0),
+                           (1.0, 0.0, 0.0))
+                }
+    
+        my_cmap = mpl.colors.LinearSegmentedColormap('my_colormap',cdict,256)
+        return my_cmap
+        
     def _exportFlatClusterData(self,filename, new_row_header,new_column_header,xt,ind1,ind2):
         """ Export the clustered results as a text file, only indicating the flat-clusters rather than the tree """
     

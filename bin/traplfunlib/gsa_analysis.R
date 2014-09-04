@@ -259,14 +259,6 @@ if ( length(set1)>=minSizeLim && print.empty==FALSE )  {
 						 	nw1 <- networkPlot(gsaRes2plot,class="distinct",direction="both",edgeWidth=c(2,20),adjusted=T,significance=opt$pvalue,geneSets=sel,overlap=opt$minedge,cexLegend=0.8,main=opt$title)
 						 }                   
 				)
-		 gen.plot2report(filename=paste(opt$out,"_distinct_dir_both_heatmap.png",sep=""),
-		 				width=800,
-		 				height=800,
-		 				html=FALSE,
-		 				ps=TRUE,
-		 				to.plot = function (){
-			 				nw1 <- GSAheatmap(gsaRes2plot,adjusted=T)
-		 				})
 	   }
 	   sel <- NULL
 	   if ( !is.infinite(opt$top) ) {
