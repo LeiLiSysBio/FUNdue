@@ -7,7 +7,7 @@ from traplfunlib.controller import Controller
 
 __author__ = "Lei Li <leili.bioinfo@gmail.com>"
 __copyright__ = "2014 by Lei Li"
-__version__ = "0.4"
+__version__ = "0.4.2"
 
 def main():
     parser = argparse.ArgumentParser()
@@ -63,7 +63,7 @@ def main():
     go_enrich_parser.add_argument(
         "--fdr", "-f" , help = "false discovery rate option")
     go_enrich_parser.add_argument(
-        "--gsea","-g", default="False", 
+        "--gsea","-g", default="False",
         help="gene set enrichment analysis option")
     go_enrich_parser.set_defaults(func=go_stat)
 

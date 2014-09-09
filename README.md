@@ -9,6 +9,9 @@ Mainly used for functional annotation of transcriptome data, but it can be broad
 ### Waiting list ###
 
 Welcome for your comments
+### Version 0.4.2 ###
+Add gene set enrichment function for the pathway and ontology analysis
+
 ### Version 0.4.1 ###
 Add a few parameters for the clustering and gene set analysis 
 
