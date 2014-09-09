@@ -13,7 +13,7 @@ main(){
 	# run_go_enrichment_analysis
 	# run_viz_go
 	# run_retrievepathway
-	# run_pathway_enrichment_analysis
+	 run_pathway_enrichment_analysis
 	# run_viz_pathway
 	# run_clustering
 	# run_gsea_analysis

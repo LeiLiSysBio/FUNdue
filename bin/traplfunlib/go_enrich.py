@@ -3,23 +3,50 @@ from scipy import stats
 import collections
 from traplfunlib.obo_parser import GODag
 import random
-
+from traplfunlib.gsea import GSEA
+import tempfile
+import time
 
 class goenrichanalysis(object):
+    def __init__(self,gsea_option, fdr_option):
+        self._gsea_option = gsea_option
+        self._fdr_option = fdr_option
+        
     """Gene ontolgoy enrichment analysis"""
-    def go_enrichment(self,target_id_file, background_file, obo_file_path, go_enrich_out):
+    def go_enrichment(self,target_id_file, background_file, obo_file_path, go_enrich_out,gsea_out):
         timer = time.clock()
         target_list = []
         background_list = []
         target_no = 0
         association_list = {}
         go_out_file = open(go_enrich_out,"a")
-
+        
+        """gene set enrichment analysis"""
+        go_obo = GODag(obo_file_path)
+        tmp_gofile = tempfile.NamedTemporaryFile(mode="a",delete=False)
+        print("Processing the gene ontology file, Please wait...")
+        for entry in open(background_file, "r"):
+            uni_line = entry.rstrip().split("\t")
+            if len(uni_line) > 3:
+                if ';' in uni_line[3]:
+                    go_list = uni_line[3].replace(" ", "").split(";")
+                    for each_go_list in go_list:
+                        tmp_gofile.write(uni_line[0] + "\t" + \
+                            each_go_list + "\t" + \
+                            go_obo[each_go_list].name + "\n")
+                else:
+                    tmp_gofile.write(uni_line[0] + "\t" + \
+                        uni_line[3] + "\t" + \
+                        go_obo[uni_line[3]].name + "\n")
+        
+        GSEA_analysis = GSEA(tmp_gofile.name, target_id_file, gsea_out,1)
+        GSEA_analysis.gsea_analysis() 
+        """Normal ontologies analysis"""
         for entry in open(''.join(target_id_file), "r"):
             uni_line = entry.rstrip("\n")
             uni_lines = uni_line.split("\t")
             if uni_lines not in target_list:
-                target_list.append(uni_lines)
+                target_list.append(uni_lines[0])
 
         for entry in open(background_file, "r"):
             uni_line = entry.rstrip("\n")
@@ -35,17 +62,12 @@ class goenrichanalysis(object):
             if entry_str in background_list:
                 target_no = target_no + 1
         
-        go_obo = GODag(obo_file_path)
         go_obo.update_association(association_list)
-
         count_obj = count()
-
         background_term = count_obj.count_terms(background_list,
                                       association_list, go_obo)
-
         target_term = count_obj.count_terms(target_list,
                                   association_list, go_obo)
-
         background_no = len(background_list)
         #target_no = len(target_list)
         go_out_file.write("Gene ontology term"+ "\t" + "ontology description" + "\t"+ "ontologies"\

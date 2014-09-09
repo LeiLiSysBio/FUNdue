@@ -49,6 +49,9 @@ class Paths(object):
         self.kegg_enrich_list_path = (
             "%s/pathway_stat.csv" %
             self.kegg_enrich_folder)
+        self.kegg_gsea_list_path = (
+            "%s/pathway_gsea_stats.csv" %
+            self.kegg_enrich_folder)
         
     def _set_clustering_folder_names(self):
         self.clustering_base_folder = "%s/clustering_analysis/" % self.output_folder

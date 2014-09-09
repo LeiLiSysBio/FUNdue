@@ -1,24 +1,32 @@
 from scipy import stats
 import collections
+from traplfunlib.gsea import GSEA
 
 
 class Pathway_analysis(object):
-	def pathway_enrichment(self, target_id_file, background_file, pathway_enrich_out):
+	def __init__(self,gsea_option,fdr_option):
+		self._gsea = gsea_option
+		self._fdr = fdr_option
+		
+	def pathway_enrichment(self, target_id_file, background_file, pathway_enrich_out, path_gsea):
 		target_list = []
 		background_list = []
 		target_no = 0
 		associate_id_map = {}
 		associate_map_desc = {}
+		
+		"""gene set enrichment analysis"""
+		GSEA_analysis = GSEA(background_file, target_id_file, path_gsea,1)
+		GSEA_analysis.gsea_analysis()
+		
+		"""Normal pathway analysis"""
 		pathway_enrich_file = open(pathway_enrich_out,"a")
-
 		pathway_out_file = open(pathway_enrich_out,"a")
-
 		for entry in open(''.join(target_id_file), "r"):
 			uni_line = entry.rstrip("\n")
 			uni_lines = uni_line.split("\t")
 			if uni_lines not in target_list:
-				target_list.append(uni_lines)
-
+				target_list.append(uni_lines[0])
 		with open(background_file,"r") as back:
 			next(back)
 			for entry in back:
@@ -33,14 +41,12 @@ class Pathway_analysis(object):
 			entry_str =''.join(entry)
 			if entry_str in background_list:
 				target_no = target_no + 1
-
 		count_obj = count()
 		background_term = count_obj.count_terms(background_list,associate_id_map)
 		target_term = count_obj.count_terms(target_list,associate_id_map)
-
 		background_no = len(background_list)
 		#target_no = len(target_list)
-		pathway_enrich_file.write("KEGG pathway term"+ "\t" + "pathway description" \
+		pathway_enrich_file.write("pathway"+ "\t" + "pathname" \
 						  + "\t" + "target number" + "\t" + "total target numbers" \
 						  + "\t" + "ratio of  targets" + "\t" + "background_number" \
 						  + "\t" + "total background numbers" + "\t" + "ratio of background" \

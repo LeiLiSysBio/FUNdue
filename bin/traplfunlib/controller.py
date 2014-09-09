@@ -11,7 +11,7 @@ from traplfunlib.retrievepathway import Retrievepathway
 from traplfunlib.pathway_enrich import Pathway_analysis
 from traplfunlib.blast2go import blast2go_analysis
 from traplfunlib.go_viz import Goviz
-from traplfunlib.gsea import GSEA_analysis
+from traplfunlib.gene_set_analysis import GSEA_analysis
 from traplfunlib.clustering import cluster_analysis
 
 
@@ -76,31 +76,37 @@ class Controller(object):
         target_id_files = self._paths.get_target_id_files()
         target_id_paths = self._paths.set_target_id_paths(target_id_files)
         self._test_folder_existance(target_id_paths)
-        goterm_analysis = goenrichanalysis()
-
+        gsea = self._args.gsea
+        fdr = self._args.gsea
+        goterm_analysis = goenrichanalysis(gsea,fdr)
         open(self._paths.go_enrich_list_path,"w").close()
         for target_id_each_file in target_id_paths:
             target_id_filename = os.path.basename(target_id_each_file)
             go_enrich_each_file = self._paths.go_enrich_folder + '/' + \
                                         target_id_filename + '_' + \
                                         "go_stat.txt"
+            go_gsea_each_file = self._paths.go_enrich_folder + '/'+ \
+                                        target_id_filename + '_' + \
+                                        "go_gsea_stat.txt"
             open(go_enrich_each_file,"w").close()
             goterm_analysis.go_enrichment(target_id_each_file,
                                     self._paths.go_background_list_path,
                                     self._paths.go_ontology_obo_path,
-                                    go_enrich_each_file)
+                                    go_enrich_each_file,go_gsea_each_file)
 
 
     def pathway_stat(self):
         target_id_file = self._paths.get_target_id_files()
         target_id_paths = self._paths.set_target_id_paths(target_id_file)
         self._test_folder_existance(target_id_paths)
-        kegg_enrichment = Pathway_analysis()
-        
+        gsea_option = self._args.gsea
+        fdr_option = self._args.fdr
+        kegg_enrichment = Pathway_analysis(gsea_option,fdr_option)
         open(self._paths.kegg_enrich_list_path,"w").close()
         kegg_enrichment.pathway_enrichment(target_id_paths,
                                             self._paths.kegg_background_list_path,
-                                            self._paths.kegg_enrich_list_path)
+                                            self._paths.kegg_enrich_list_path, 
+                                            self._paths.kegg_gsea_list_path)
         
     def go_viz(self):
         go_viz_object = Goviz()

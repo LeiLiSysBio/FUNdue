@@ -62,6 +62,9 @@ def main():
         "directory is used.")
     go_enrich_parser.add_argument(
         "--fdr", "-f" , help = "false discovery rate option")
+    go_enrich_parser.add_argument(
+        "--gsea","-g", default="False", 
+        help="gene set enrichment analysis option")
     go_enrich_parser.set_defaults(func=go_stat)
 
     # Parameters for pathway enrichment analysis
@@ -71,6 +74,12 @@ def main():
         "project_path",default=".",nargs="?",
         help="Path of the project folder. If none is given, the current"
         "directory is used")
+    kegg_enrich_parser.add_argument(
+        "--gsea","-g", default="False",
+        help="gene set enrichment analysis option")
+    kegg_enrich_parser.add_argument(
+        "--fdr","-f",
+        help="False discovery rate option")
     kegg_enrich_parser.set_defaults(func=pathway_stat)
 
     # Parameters for go visulization
