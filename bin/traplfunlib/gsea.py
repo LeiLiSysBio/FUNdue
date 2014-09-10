@@ -44,7 +44,7 @@ class GSEA(object):
 					path_desc[uni_line[1]] = uni_line[2]	
 								
 		"""For each pathway, iterature all the ranked gene list"""
-		sum = []
+		summary = []
 		count = 0
 		for id_list in path_id:
 			count = count + 1
@@ -96,28 +96,28 @@ class GSEA(object):
 			val_list_down = [float(str(x[2]).replace('-0.0','0.0')) for x in val_list]
 			up_cor, up_val = stats.spearmanr(sort_gene_list_value_up,val_list_up)
 			down_cor, down_val = stats.spearmanr(sort_gene_list_value_down,val_list_down)
-			sum.append([id_list, path_desc[id_list], gene_in_this_pathway, max_p, \
+			summary.append([id_list, path_desc[id_list], gene_in_this_pathway, max_p, \
 				up_cor, max_p_stat, max_p_g, max_p_g_up, max_m,down_cor,max_m_stat,max_m_g, \
 				max_m_g_down])
 		print("sum up the pathway result...")	
 		adjust_stats = importr('stats')
-		pval_up = [10**(-x[3]) for x in sum]
-		pval_down = [10**(-x[8]) for x in sum]
+		pval_up = [10**(-x[3]) for x in summary]
+		pval_down = [10**(-x[8]) for x in summary]
 		print("Calculating false discvoery rate")
 		p_adjust_up = adjust_stats.p_adjust(FloatVector(pval_up),method='BH')
 		p_adjust_down = adjust_stats.p_adjust(FloatVector(pval_down),method='BH')
-		for row_no in range(len(sum)):
-			sum[row_no][3] = -math.log(p_adjust_up[row_no],10)
-			sum[row_no][8] = -math.log(p_adjust_down[row_no],10)
+		for row_no in range(len(summary)):
+			summary[row_no][3] = -math.log(p_adjust_up[row_no],10)
+			summary[row_no][8] = -math.log(p_adjust_down[row_no],10)
 		# write to one file
 		print("Writing to file")
-		with open(self._pathout,'wt') as csvfile:
+		with open(self._pathout,'a') as csvfile:
 			writer = csv.writer(csvfile,delimiter="\t")
 			writer.writerow(['pathway','pathname','path_genes', \
 				'up_p','up_cor', 'up_max_stat','path_genes_up', \
 				'genes_up', 'down_p','down_cor','down_max_stat', \
 				'path_genes_down', 'genes_down'])
-			for line in sum:
+			for line in summary:
 				writer.writerow(line)
 					
 							
