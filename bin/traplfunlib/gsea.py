@@ -25,10 +25,10 @@ class GSEA(object):
 		path_id = defaultdict(list)
 		gene_list = {}
 		path_desc = {}
-		with open(''.join(self._genelist),"r") as gene_file:
+		with open(self._genelist,"r") as gene_file:
 			for gene_line in gene_file:
 				gene_uni_line = gene_line.rstrip("\n").split("\t")
-				if gene_uni_line[0] not in gene_list:
+				if gene_uni_line[0] not in gene_list and gene_uni_line[1] != 'NA' :
 					gene_list[gene_uni_line[0]] = float(gene_uni_line[1])
 		length = len(gene_list)
 		sort_gene_list = sorted(gene_list.items(),key=operator.itemgetter(1),reverse=True)
@@ -48,7 +48,7 @@ class GSEA(object):
 		count = 0
 		for id_list in path_id:
 			count = count + 1
-			print("processing term id\t" + id_list + "\t" + count + "/" + len(path_id))
+			print("processing term id\t" + str(id_list) + "\t" + str(count) + "/" + str(len(path_id)))
 			sort_total_gene_list = self._take(length, sort_gene_list)
 			gene_in_this_pathway =len([x for x in sort_total_gene_list if x[0] in path_id[id_list]])
 			gene_not_this_pathway = length - gene_in_this_pathway

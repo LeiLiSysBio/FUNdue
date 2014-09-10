@@ -22,7 +22,7 @@ class Pathway_analysis(object):
 		"""Normal pathway analysis"""
 		pathway_enrich_file = open(pathway_enrich_out,"a")
 		pathway_out_file = open(pathway_enrich_out,"a")
-		for entry in open(''.join(target_id_file), "r"):
+		for entry in open(target_id_file, "r"):
 			uni_line = entry.rstrip("\n")
 			uni_lines = uni_line.split("\t")
 			if uni_lines not in target_list:

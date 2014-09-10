@@ -84,10 +84,10 @@ class Controller(object):
             target_id_filename = os.path.basename(target_id_each_file)
             go_enrich_each_file = self._paths.go_enrich_folder + '/' + \
                                         target_id_filename + '_' + \
-                                        "go_stat.txt"
+                                        "go_stat.csv"
             go_gsea_each_file = self._paths.go_enrich_folder + '/'+ \
                                         target_id_filename + '_' + \
-                                        "go_gsea_stat.txt"
+                                        "go_gsea_stat.csv"
             open(go_enrich_each_file,"w").close()
             goterm_analysis.go_enrichment(target_id_each_file,
                                     self._paths.go_background_list_path,
@@ -103,10 +103,18 @@ class Controller(object):
         fdr_option = self._args.fdr
         kegg_enrichment = Pathway_analysis(gsea_option,fdr_option)
         open(self._paths.kegg_enrich_list_path,"w").close()
-        kegg_enrichment.pathway_enrichment(target_id_paths,
-                                            self._paths.kegg_background_list_path,
-                                            self._paths.kegg_enrich_list_path, 
-                                            self._paths.kegg_gsea_list_path)
+        for target_id_each_file in target_id_paths:
+            target_id_filename = os.path.basename(target_id_each_file)
+            kegg_enrich_each_file = self._paths.kegg_enrich_folder + "/" + \
+                                    target_id_filename + "_" + \
+                                    "path_stat.csv"
+            kegg_gsea_each_file = self._paths.kegg_enrich_folder + "/" + \
+                                    target_id_filename + "_" + \
+                                    "path_gsea_stat.csv"
+            kegg_enrichment.pathway_enrichment(target_id_each_file,
+                                    self._paths.kegg_background_list_path,
+                                    kegg_enrich_each_file, 
+                                    kegg_gsea_each_file)
         
     def go_viz(self):
         go_viz_object = Goviz()
