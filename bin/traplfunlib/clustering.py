@@ -13,7 +13,7 @@ import getopt
 
 ################# Perform the hierarchical clustering #################
 class cluster_analysis(object):   
-    def __init__(self,filename, expressionpath, rowmethod, rowmatrix, colmethod, colmatrix, color, idcol):
+    def __init__(self,filename, expressionpath, rowmethod, rowmatrix, colmethod, colmatrix, color):
         self._filename = filename
         self._expressionpath = expressionpath
         self._rowmethod = rowmethod
@@ -21,7 +21,6 @@ class cluster_analysis(object):
         self._colmethod = colmethod
         self._colmatrix = colmatrix
         self._color = color
-        self._idcol = idcol
                    
     def _importfromData(self,filename):
         matrix=[]

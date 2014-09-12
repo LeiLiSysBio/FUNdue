@@ -13,7 +13,7 @@ from traplfunlib.blast2go import blast2go_analysis
 from traplfunlib.go_viz import Goviz
 from traplfunlib.gene_set_analysis import GSEA_analysis
 from traplfunlib.clustering import cluster_analysis
-
+from traplfunlib.pathway_viz import Pathviz
 
 class Controller(object):
     """Control all the commands."""
@@ -102,7 +102,6 @@ class Controller(object):
         gsea_option = self._args.gsea
         fdr_option = self._args.fdr
         kegg_enrichment = Pathway_analysis(gsea_option,fdr_option)
-        open(self._paths.kegg_enrich_list_path,"w").close()
         for target_id_each_file in target_id_paths:
             target_id_filename = os.path.basename(target_id_each_file)
             kegg_enrich_each_file = self._paths.kegg_enrich_folder + "/" + \
@@ -111,6 +110,8 @@ class Controller(object):
             kegg_gsea_each_file = self._paths.kegg_enrich_folder + "/" + \
                                     target_id_filename + "_" + \
                                     "path_gsea_stat.csv"
+            open(kegg_enrich_each_file,"w").close()
+            open(kegg_gsea_each_file,"w").close()
             kegg_enrichment.pathway_enrichment(target_id_each_file,
                                     self._paths.kegg_background_list_path,
                                     kegg_enrich_each_file, 
@@ -133,6 +134,21 @@ class Controller(object):
             go_viz_object.go_viz(go_enrich_each_file,
                             go_viz_each_file)
     
+    def path_viz(self):
+        target_id_file = self._paths.get_target_id_files()
+        target_id_paths = self._paths.set_target_id_paths(target_id_file)
+        self._test_folder_existance(target_id_paths)
+        for target_id_each_file in target_id_paths:
+            target_id_filename = os.path.basename(target_id_each_file)
+            kegg_gsea_each_file = self._paths.kegg_enrich_folder + "/" + \
+                                    target_id_filename + "_" + \
+                                    "path_gsea_stat.csv"
+            path_viz_object=Pathviz(self._paths.build_pathway_path, \
+                kegg_gsea_each_file, target_id_each_file, self._args.code, \
+                self._paths.kegg_viz_folder)
+            path_viz_object.path_viz()
+        
+        
     def clustering(self):
         expression_files = self._paths.get_expression_files()
         expression_paths = self._paths.set_expression_paths(expression_files)

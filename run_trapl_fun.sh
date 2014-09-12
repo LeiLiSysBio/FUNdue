@@ -14,7 +14,7 @@ main(){
 	# run_viz_go
 	# run_retrievepathway
 	# run_pathway_enrichment_analysis
-	# run_viz_pathway
+	 run_viz_pathway
 	# run_clustering
 	# run_gsea_analysis
 	# generate_package_to_send
@@ -103,6 +103,12 @@ run_gsea_analysis(){
 	$TRAPL_FUN_FOLDER
 }
 
+run_viz_pathway(){
+	$PYTHON_PATH $TRAPL_FUN_PATH \
+	path_viz \
+	-c $KEGG_organism_code \
+	$TRAPL_FUN_FOLDER
+}
 generate_package_to_send(){
 	SEND_FOLDER=XXX-Functional-annotation-analysis
 	mkdir ${SEND_FOLDER}

@@ -40,18 +40,12 @@ class Paths(object):
 
     def _set_kegg_folder_names(self):
         self.kegg_base_folder = "%s/pathway" % self.output_folder
-        self.kegg_background_folder = "%s/background_kegg/" % self.kegg_base_folder
+        self.kegg_background_folder = "%s/background_path/" % self.kegg_base_folder
         self.kegg_enrich_folder = "%s/pathway_enrichment/" % self.kegg_base_folder
-        self.kegg_viz_folder = "%s/kegg_viz/" %self.kegg_base_folder
+        self.kegg_viz_folder = "%s/path_viz/" %self.kegg_base_folder
         self.kegg_background_list_path = (
             "%s/background_kegg.csv" %
             self.kegg_background_folder)
-        self.kegg_enrich_list_path = (
-            "%s/pathway_stat.csv" %
-            self.kegg_enrich_folder)
-        self.kegg_gsea_list_path = (
-            "%s/pathway_gsea_stats.csv" %
-            self.kegg_enrich_folder)
         
     def _set_clustering_folder_names(self):
         self.clustering_base_folder = "%s/clustering_analysis/" % self.output_folder
@@ -63,7 +57,7 @@ class Paths(object):
         self.version_path = "%s/used_trapl_fun_version.txt" % (self.output_folder)
         self.uniprot_id_mapping_path = "/storage2/lei/Project/TRAPL_FUN/UniprotKB_GO/idmapping_selected.tab"
         self.go_ontology_obo_path = "/storage2/lei/Project/TRAPL_FUN/gene_ontology.1_2.obo"
-        self.build_pathway_path = "bin/traplfunlib/buildpathwayDB.R"
+        self.build_pathway_path = "bin/traplfunlib/pathway.R"
         self.blast2go_path = "bin/b2g4pipe"
         self.gsa_path = "bin/traplfunlib/gsa_analysis.R"
 
