@@ -20,10 +20,12 @@ class Pathway_analysis(object):
 		associate_map_desc = {}
 		
 		"""gene set enrichment analysis"""
-		#GSEA_analysis = GSEA(background_file, target_id_file, path_gsea,1)
-		#GSEA_analysis.gsea_analysis()
+		print("Gene set enrichment analysis")
+		GSEA_analysis = GSEA(background_file, target_id_file, path_gsea,1)
+		GSEA_analysis.gsea_analysis()
 		
 		"""Normal pathway analysis"""
+		print("Enrichment analysis using Fisher t test")
 		for entry in open(target_id_file, "r"):
 			uni_line = entry.rstrip("\n")
 			uni_lines = uni_line.split("\t")

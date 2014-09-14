@@ -9,6 +9,7 @@ Mainly used for functional annotation of transcriptome data, but it can be broad
 ### Waiting list ###
 
 Welcome for your comments
+
 ### Version 0.5 ###
 Add the function for pathway visulization
 fix the bugs caused by pathway enrichment 
@@ -52,7 +53,7 @@ For the pathway analysis, you need paste a list of locus\_tag IDs
 
 * Dependencies
 ** Python modules (scipy)
-** R modules (KEGGREST,getopt, piano, optparse)
+** R modules (KEGGREST,getopt, piano, optparse, gsge, pathview)
 ** install methods
 source("http://bioconductor.org/biocLite.R")
 biocLite()

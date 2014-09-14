@@ -8,13 +8,14 @@ main(){
 	# create_folders
 	# set_up_analysis_folder
 	# get_gff_files
+	# get_expression_files
 	# run_blast2go
 	# run_retrieveGO
 	# run_go_enrichment_analysis
 	# run_viz_go
 	# run_retrievepathway
 	# run_pathway_enrichment_analysis
-	 run_viz_pathway
+	# run_viz_pathway
 	# run_clustering
 	# run_gsea_analysis
 	# generate_package_to_send
@@ -47,6 +48,16 @@ get_gff_files(){
     ls -l $TRAPL_FUN_FOLDER/input/annotations/
 }
 
+get_expression_files(){
+	SOURCE=XXX
+	DEST=XXX
+	for file in ${SOURCE}/*.csv
+	do
+		grep "^sense" $file|grep "="|awk -F"\t" '{print $10 "\t" $(NF-2)}'| \
+			awk -F"=" '{print $(NF)}' > ${DEST}/${file##*/}.txt
+	done
+	
+}
 run_blast2go(){
 	if ! [ -f ${TRAPL_FUN_FOLDER}/input/blast2go_xml/* ]
 	then
@@ -84,7 +95,7 @@ run_viz_go(){
 	$TRAPL_FUN_FOLDER
 }
 
-run_pathway_enrichment_analysis(){
+run_pathway_enrichment_analysis(){	
 	$PYTHON_PATH $TRAPL_FUN_PATH \
 	pathway_stat \
 	$TRAPL_FUN_FOLDER	

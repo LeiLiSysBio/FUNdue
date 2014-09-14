@@ -25,6 +25,7 @@ class goenrichanalysis(object):
         go_obo = GODag(obo_file_path)
         tmp_gofile = tempfile.NamedTemporaryFile(mode="a",delete=False)
         """gene set enrichment analysis"""
+        print("Gene set enrichment analysis")
         if self._gsea_option == 'True':
             print("Processing the gene ontology file, Please wait...")
             for entry in open(background_file, "r"):
@@ -44,6 +45,7 @@ class goenrichanalysis(object):
             GSEA_analysis = GSEA(tmp_gofile.name, target_id_file, gsea_out,1)
             GSEA_analysis.gsea_analysis() 
         """Normal ontologies analysis"""
+        print("Enrichment analysis using Fisher t test")
         for entry in open(''.join(target_id_file), "r"):
             uni_line = entry.rstrip("\n")
             uni_lines = uni_line.split("\t")
