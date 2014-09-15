@@ -26,6 +26,7 @@ class GSEA(object):
 		gene_list = {}
 		path_desc = {}
 		with open(self._genelist,"r") as gene_file:
+			next(gene_file)
 			for gene_line in gene_file:
 				gene_uni_line = gene_line.rstrip("\n").split("\t")
 				if gene_uni_line[0] not in gene_list and gene_uni_line[1] != 'NA' :

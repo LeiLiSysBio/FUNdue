@@ -19,8 +19,7 @@ class Pathviz(object):
 			for entry in Path:
 				line = entry.rstrip().split("\t")
 				if float(line[3]) >= 1 or float(line[8]) >= 1:
-					print(self._code)
-					print(line[0][3:])
+					print("processing pathway\t" + str(self._code) + str(line[0][3:]))
 					with open(os.devnull, "w") as devnull:
 						call(["Rscript", self._pathway_script, \
 						"-o", self._code, "-p", str(line[0][3:]), \

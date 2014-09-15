@@ -26,11 +26,13 @@ class Pathway_analysis(object):
 		
 		"""Normal pathway analysis"""
 		print("Enrichment analysis using Fisher t test")
-		for entry in open(target_id_file, "r"):
-			uni_line = entry.rstrip("\n")
-			uni_lines = uni_line.split("\t")
-			if uni_lines not in target_list:
-				target_list.append(uni_lines[0])
+		with open(target_id_file, "r") as target_file:
+			next(target_file)
+			for entry in target_file:
+				uni_line = entry.rstrip("\n")
+				uni_lines = uni_line.split("\t")
+				if uni_lines not in target_list:
+					target_list.append(uni_lines[0])
 		with open(background_file,"r") as back:
 			next(back)
 			for entry in back:

@@ -46,8 +46,15 @@ if(! is.null(opt$organism) && ! is.null(opt$path_id) && ! is.null(opt$path_resul
 	path <- opt$path_id
 	path_result <- opt$path_result
 	folder <- opt$folder
-	input <- readExpData(path_result,row.names=1)
-	#print(input)
+	print(path_result)
+	print("Read differetial expression files")
+	input <- readExpData(path_result,row.names=NULL)
+	cnames=input[,1]
+	input=input[,2]
+	names(input)=cnames
+	input_base <- basename(path_result)
+	path_suffix <- paste(input_base,path,sep="_")
 	setwd(folder)
-	pv.out <- pathview(gene.data=input,gene.idtype="kegg",pathway.id=path,species=org,out.suffix=path,kegg.native=T)
+	print("Pathway shown")
+	pv.out <- pathview(gene.data=input,gene.idtype="kegg",pathway.id=path,species=org,out.suffix=path_suffix,kegg.native=T)
 }
