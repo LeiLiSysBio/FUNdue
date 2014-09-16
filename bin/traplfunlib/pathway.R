@@ -46,7 +46,6 @@ if(! is.null(opt$organism) && ! is.null(opt$path_id) && ! is.null(opt$path_resul
 	path <- opt$path_id
 	path_result <- opt$path_result
 	folder <- opt$folder
-	print(path_result)
 	print("Read differetial expression files")
 	input <- readExpData(path_result,row.names=NULL)
 	cnames=input[,1]

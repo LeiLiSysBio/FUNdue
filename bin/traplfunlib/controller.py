@@ -126,13 +126,15 @@ class Controller(object):
             target_id_filename = os.path.basename(target_id_each_file)
             go_enrich_each_file = self._paths.go_enrich_folder + '/' + \
                                     target_id_filename + '_' + \
-                                    "go_stat.txt"
+                                    "go_stat.csv"
             go_viz_each_file = self._paths.go_viz_folder + '/' + \
                                     target_id_filename + '_' + \
                                     "go_viz_revigo.txt"
+            go_viz_file_tag = self._paths.go_viz_folder + '/' + \
+                                    target_id_filename
             open(go_viz_each_file,"w").close()
             go_viz_object.go_viz(go_enrich_each_file,
-                            go_viz_each_file)
+                            go_viz_each_file, go_viz_file_tag,self._paths.go_ontology_obo_path)
     
     def path_viz(self):
         target_id_file = self._paths.get_target_id_files()
