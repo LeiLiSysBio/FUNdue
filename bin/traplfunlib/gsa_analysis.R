@@ -1,9 +1,5 @@
 #!/usr/bin/env Rscript
 
-#########################
-# installing PIANO
-# source("http://bioconductor.org/biocLite.R")
-# biocLite("piano")
 suppressPackageStartupMessages(library("piano"))
 suppressPackageStartupMessages(library("optparse"))
 myParseArgs <- function(usage,option_list,filenames.exist=NULL,multiple.options=NULL,mandatory=NULL) {

@@ -58,7 +58,7 @@ class cluster_analysis(object):
             cmap=pylab.cm.bwr
         if color_gradient == 'yellow_red':
             cmap=pylab.cm.YlOrRd
-        if color_gradient == 'red_black_green':
+        if color_gradient == 'default':
             cmap=self._RedBlackGreen()
         if color_gradient == 'seismic':
             cmap=pylab.cm.seismic
@@ -115,7 +115,7 @@ class cluster_analysis(object):
         if column_method.lower() != 'none':
             d2 = dist.pdist(filematrix.T)
             D2 = dist.squareform(d2)
-            ax2 = fig.add_axes([ax2_x, ax2_y, ax2_w, ax2_h], frame_on=True)
+            ax2 = fig.add_axes([ax2_x, ax2_y, ax2_w, ax2_h], frame_on=False)
             Y2 = sch.linkage(D2, method=column_method, metric=column_metric) ### array-clustering metric - 'average', 'single', 'centroid', 'complete'
             sch.set_link_color_palette(['black'])
             Z2 = sch.dendrogram(Y2, color_threshold=np.inf)
@@ -129,7 +129,7 @@ class cluster_analysis(object):
         if row_method.lower() != 'none':
             d1 = dist.pdist(filematrix)
             D1 = dist.squareform(d1)  # full matrix
-            ax1 = fig.add_axes([ax1_x, ax1_y, ax1_w, ax1_h], frame_on=True) # frame_on may be False
+            ax1 = fig.add_axes([ax1_x, ax1_y, ax1_w, ax1_h], frame_on=False) # frame_on may be False
             Y1 = sch.linkage(D1, method=row_method, metric=row_metric)
             sch.set_link_color_palette(['black'])
             Z1 = sch.dendrogram(Y1, color_threshold=np.inf, orientation='right')
@@ -220,7 +220,7 @@ class cluster_analysis(object):
         pylab.savefig(filename)
         print('The clustering result can be found in',filename)
         filename = filename[:-3]+'png'
-        pylab.savefig(filename, dpi=100) #,dpi=200
+        pylab.savefig(filename, dpi=200) #,dpi=200
         pylab.show()
     
     def _getColorRange(x):
@@ -238,19 +238,10 @@ class cluster_analysis(object):
             return vmax,vmin
     
     def _RedBlackGreen(self):
-        cdict = {'red':   ((0.0, 0.0, 0.0),
-                           (0.5, 0.0, 0.1),
-                           (1.0, 1.0, 1.0)),
-    
-                 'blue': ((0.0, 0.0, 0.0),
-                           (1.0, 0.0, 0.0)),
-    
-                 'green':  ((0.0, 0.0, 1.0),
-                           (0.5, 0.1, 0.0),
-                           (1.0, 0.0, 0.0))
-                }
-    
-        my_cmap = mpl.colors.LinearSegmentedColormap('my_colormap',cdict,256)
+        startcolor = '#998ec3' 
+        midcolor = '#f7f7f7'
+        endcolor = '#f1a340'
+        my_cmap = mpl.colors.LinearSegmentedColormap.from_list('my_colormap',[startcolor,midcolor,endcolor])
         return my_cmap
         
     def _exportFlatClusterData(self,filename, new_row_header,new_column_header,xt,ind1,ind2):

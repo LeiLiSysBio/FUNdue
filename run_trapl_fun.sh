@@ -56,7 +56,6 @@ get_expression_files(){
 		grep "^sense" $file|grep "="|awk -F"\t" '{print $10 "\t" $(NF-2)}'| \
 			awk -F"=" '{print $(NF)}' > ${DEST}/${file##*/}.txt
 	done
-	
 }
 run_blast2go(){
 	if ! [ -f ${TRAPL_FUN_FOLDER}/input/blast2go_xml/* ]
@@ -104,7 +103,7 @@ run_pathway_enrichment_analysis(){
 run_clustering(){
 	$PYTHON_PATH $TRAPL_FUN_PATH \
 	clustering \
-	-co red_black_green \
+	-co default \
 	$TRAPL_FUN_FOLDER
 }
 

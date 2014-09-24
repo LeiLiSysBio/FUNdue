@@ -118,7 +118,6 @@ class Controller(object):
                                     kegg_gsea_each_file)
         
     def go_viz(self):
-        go_viz_object = Goviz()
         open(self._paths.go_viz_list_path,"w").close()
         target_id_files = self._paths.get_target_id_files()
         target_id_paths = self._paths.set_target_id_paths(target_id_files)
@@ -133,8 +132,9 @@ class Controller(object):
             go_viz_file_tag = self._paths.go_viz_folder + '/' + \
                                     target_id_filename
             open(go_viz_each_file,"w").close()
+            go_viz_object = Goviz(self._paths.go_ontology_obo_path,self._paths.slim_go_ontology_obo_path)
             go_viz_object.go_viz(go_enrich_each_file,
-                            go_viz_each_file, go_viz_file_tag,self._paths.go_ontology_obo_path)
+                            go_viz_each_file, go_viz_file_tag)
     
     def path_viz(self):
         target_id_file = self._paths.get_target_id_files()
