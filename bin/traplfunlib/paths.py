@@ -58,7 +58,7 @@ class Paths(object):
         self.uniprot_id_mapping_path = "/storage2/lei/Project/TRAPL_FUN/UniprotKB_GO/idmapping_selected.tab"
         self.go_ontology_obo_path = "/storage2/lei/Project/TRAPL_FUN/gene_ontology.1_2.obo"
         self.slim_go_ontology_obo_path = "/storage2/lei/Project/TRAPL_FUN/goslim_generic.obo"
-        self.build_pathway_path = "bin/traplfunlib/pathway.R"
+        self.common_r_path = "bin/traplfunlib/common.R"
         self.blast2go_path = "bin/b2g4pipe"
         self.gsa_path = "bin/traplfunlib/gsa_analysis.R"
 

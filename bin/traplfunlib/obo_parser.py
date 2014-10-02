@@ -193,7 +193,6 @@ class GODag(dict):
             return
 
         rec = self[term]
-        print(rec)
         if verbose:
             print("all parents:", rec.get_all_parents())
             print("all children:", rec.get_all_children())
@@ -249,7 +248,6 @@ class GODag(dict):
             import pygraphviz as pgv
         except:
             print("pygraphviz not installed, lineage not drawn!")
-            print("try `easy_install pygraphviz`")
             return
 
         G = pgv.AGraph()

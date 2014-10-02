@@ -67,7 +67,7 @@ class Controller(object):
         self._test_folder_existance(
             self._paths.required_kegg_folders())
         retrieve_pathway = Retrievepathway()
-        retrieve_pathway.buildpathway(self._paths.build_pathway_path,
+        retrieve_pathway.buildpathway(self._paths.common_r_path,
                         self._args.code,
                         self._paths.kegg_background_list_path)
         
@@ -132,7 +132,9 @@ class Controller(object):
             go_viz_file_tag = self._paths.go_viz_folder + '/' + \
                                     target_id_filename
             open(go_viz_each_file,"w").close()
-            go_viz_object = Goviz(self._paths.go_ontology_obo_path,self._paths.slim_go_ontology_obo_path)
+            go_viz_object = Goviz(self._paths.go_ontology_obo_path, \
+                        self._paths.slim_go_ontology_obo_path, \
+                        self._paths.common_r_path)
             go_viz_object.go_viz(go_enrich_each_file,
                             go_viz_each_file, go_viz_file_tag)
     
@@ -145,7 +147,7 @@ class Controller(object):
             kegg_gsea_each_file = self._paths.kegg_enrich_folder + "/" + \
                                     target_id_filename + "_" + \
                                     "path_gsea_stat.csv"
-            path_viz_object=Pathviz(self._paths.build_pathway_path, \
+            path_viz_object=Pathviz(self._paths.common_r_path, \
                 kegg_gsea_each_file, target_id_each_file, self._args.code, \
                 self._paths.kegg_viz_folder)
             path_viz_object.path_viz()

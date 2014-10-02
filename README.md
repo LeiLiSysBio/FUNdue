@@ -10,6 +10,9 @@ Mainly used for functional annotation of transcriptome data, but it can be broad
 
 Welcome for your comments
 
+## Version 0.5.2 ###
+Add the function for visualizing gene ontology trees
+
 ### Version 0.5 ###
 Add the function for pathway visulization
 fix the bugs caused by pathway enrichment 

@@ -47,7 +47,6 @@ class blast2go_analysis(object):
 			   count += 1
 			out_handle.write(line.encode())
 		
-		
 		in_handle.close()
 		print("Input has %i queries" % count)
 

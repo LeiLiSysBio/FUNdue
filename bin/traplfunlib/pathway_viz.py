@@ -34,17 +34,17 @@ class Pathviz(object):
 				if float(line[3]) >= 1.5:
 					enrich_path_up_list[str(line[1]).split('-')[0]]=float(line[3])
 					print("processing Upregulated pathway\t" + str(self._code) + str(line[0][3:]))
-					#with open(os.devnull, "w") as devnull:
-					#	call(["Rscript", self._pathway_script, \
-					#	"-o", self._code, "-p", str(line[0][3:]), \
-					#	"-r", self._target_id, "-f", self._output])
+					with open(os.devnull, "w") as devnull:
+						call(["Rscript", self._pathway_script, \
+						"-o", self._code, "-p", str(line[0][3:]), \
+						"-r", self._target_id, "-f", self._output])
 				elif float(line[8]) >= 1.5:
 					enrich_path_down_list[str(line[1]).split('-')[0]]=float(line[8])
 					print("processing Downregulated pathway\t" + str(self._code) + str(line[0][3:]))
-					#with open(os.devnull, "w") as devnull:
-					#	call(["Rscript", self._pathway_script, \
-					#	"-o", self._code, "-p", str(line[0][3:]), \
-					#	"-r", self._target_id, "-f", self._output])
+					with open(os.devnull, "w") as devnull:
+						call(["Rscript", self._pathway_script, \
+						"-o", self._code, "-p", str(line[0][3:]), \
+						"-r", self._target_id, "-f", self._output])
 		sort_enrich_path_up_list = sorted(enrich_path_up_list.items(),key=operator.itemgetter(1),reverse=False)
 		sort_enrich_path_down_list = sorted(enrich_path_down_list.items(),key=operator.itemgetter(1),reverse=False)
 		for up_list in sort_enrich_path_up_list:

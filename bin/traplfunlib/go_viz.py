@@ -4,12 +4,18 @@ import os
 import matplotlib
 matplotlib.use("Agg")
 import pylab as pl
+import rpy2.robjects as rpy
+from subprocess import call
+import urllib
+import urllib.request
+import urllib.parse
 
 class Goviz(object):
 	"""Uses mapping to detect the go terms"""
-	def __init__(self,obo_path,slim_obo_path):
+	def __init__(self,obo_path,slim_obo_path,viz_path):
 		self._obo_path = obo_path
 		self._slim_obo_path = slim_obo_path
+		self._viz_path = viz_path
 	
 	def _mapslim(self, go_term, go_dag, goslim_dag):
 		# check parameters
@@ -38,7 +44,29 @@ class Goviz(object):
 		# ancestor of the GO-Slim in _any_ path (in bottom->top order)
 		direct_ancestors = all_ancestors - covered_ancestors
 		return direct_ancestors
-
+	
+	def _draw_go(self,go_list,go_viz_output):
+		url = "http://amigo.geneontology.org/visualize"
+		color='lightblue'
+		new_go_list=[]
+		for go_id in go_list:
+			#new_go_list.append('\\"'+str(go_id)+'\\":{\\"fill\\": \\"'+str(color)+'\\"}')
+			new_go_list.append('\"'+str(go_id)+'\":{\"fill\": \"'+str(color)+'\"}')
+		term_data="{"+','.join(str(go_tmp) for go_tmp in new_go_list)+"}"
+		term_data_type='json'
+		postdata = urllib.parse.urlencode(
+						{'mode': 'amigo',
+						'inline': 'false',
+						'format':'png',
+						'term_data_type':'json',
+						'term_data':term_data
+						})
+		postdata = postdata.encode('utf-8')
+		outfile=open(go_viz_output,'wb')
+		res=urllib.request.urlopen(url,postdata)
+		outfile.write(res.read())
+		outfile.close()
+	
 	def go_viz(self, enrichment_file, viz_revigo, viz_tag):
 		viz_revigo_file = open(viz_revigo,"a")
 		viz_revigo_file.write("% created by TRAPL_FUN version 0.2" + "\n")
@@ -47,12 +75,17 @@ class Goviz(object):
 		viz_revigo_file.write("% GeneGroup" + "\t" + "pValue" + "\n")
 		gene_ontology_object=GODag(self._obo_path)
 		slim_gene_ontology_object=GODag(self._slim_obo_path)
+		#For slim use
 		enrich_go_term_bp_no = {}
 		enrich_go_term_bp_id = []
 		enrich_go_term_mf_no = {}
 		enrich_go_term_mf_id = []
 		enrich_go_term_cc_no = {}
 		enrich_go_term_cc_id = []
+		#For go taxonmy view use
+		enrich_go_term_bp = []
+		enrich_go_term_mf = []
+		enrich_go_term_cc = []
 		with open(enrichment_file,"r") as go_enrich:
 			next(go_enrich)
 			for entry in go_enrich:
@@ -65,6 +98,7 @@ class Goviz(object):
 						direct_term_set = self._mapslim(uni_lines[0], \
 							gene_ontology_object, slim_gene_ontology_object)
 						direct_term = ''.join(str(s) for s in direct_term_set)
+						enrich_go_term_bp.append(uni_lines[0])
 						if direct_term in enrich_go_term_bp_id and direct_term !=  "biological_process":
 							sum_no = enrich_go_term_bp_no[direct_term] + int(uni_lines[3])
 							enrich_go_term_bp_no[direct_term]= sum_no
@@ -75,6 +109,7 @@ class Goviz(object):
 						direct_term_set = self._mapslim(uni_lines[0], \
 							gene_ontology_object, slim_gene_ontology_object)
 						direct_term = ''.join(str(s) for s in direct_term_set)
+						enrich_go_term_mf.append(uni_lines[0])
 						if direct_term in enrich_go_term_mf_id and direct_term != "molecular_function":
 							sum_no = enrich_go_term_mf_no[direct_term] + int(uni_lines[3])
 							enrich_go_term_mf_no[direct_term]= sum_no
@@ -85,19 +120,18 @@ class Goviz(object):
 						direct_term_set = self._mapslim(uni_lines[0], \
 							gene_ontology_object, slim_gene_ontology_object)
 						direct_term = ''.join(str(s) for s in direct_term_set)
+						enrich_go_term_cc.append(uni_lines[0])
 						if direct_term in enrich_go_term_cc_id and direct_term != "cellular_component":
 							sum_no = enrich_go_term_cc_no[direct_term] + int(uni_lines[3])
 							enrich_go_term_cc_no[direct_term]= sum_no
 						elif direct_term != "cellular_component":
 							enrich_go_term_cc_id.append(direct_term)
 							enrich_go_term_cc_no[direct_term]=int(uni_lines[3])
-					"""Test function, pygraphviz need be installed in the right python version"""
-					#print("output for visulization")
-					#term = gene_ontology_object.query_term(uni_lines[0],verbose=True)
-					#print(viz_tag)
-					#print(term)
-					#output = viz_tag+'_'+str(num)+'png'
-					#gene_ontology_object.draw_lineage([term],lineage_img=output)
+		## Draw go taxonomy tree
+		self._draw_go(enrich_go_term_bp,viz_tag + "_bp.png")
+		self._draw_go(enrich_go_term_mf,viz_tag + "_mf.png")
+		self._draw_go(enrich_go_term_cc,viz_tag + "_cc.png")
+		## Draw go slim figure
 		fig = pl.figure(figsize=[12,12])
 		ax = fig.add_subplot(111)
 		pl.rcParams['font.size'] = 8.0
