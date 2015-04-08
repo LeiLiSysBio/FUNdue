@@ -31,13 +31,7 @@ class Paths(object):
         self.go_background_list_path = (
             "%s/background_go.csv" %
             self.go_background_folder)
-        self.go_enrich_list_path = (
-            "%s/go_term_stat.csv" %
-            self.go_enrich_folder)
-        self.go_viz_list_path = (
-            "%s/go_viz_revigo.txt" %
-            self.go_viz_folder)
-
+        
     def _set_kegg_folder_names(self):
         self.kegg_base_folder = "%s/pathway" % self.output_folder
         self.kegg_background_folder = "%s/background_path/" % self.kegg_base_folder
@@ -55,9 +49,9 @@ class Paths(object):
          
     def _set_static_files(self):
         self.version_path = "%s/used_trapl_fun_version.txt" % (self.output_folder)
-        self.uniprot_id_mapping_path = "/storage2/lei/Project/TRAPL_FUN/UniprotKB_GO/idmapping_selected.tab"
-        self.go_ontology_obo_path = "/storage2/lei/Project/TRAPL_FUN/gene_ontology.1_2.obo"
-        self.slim_go_ontology_obo_path = "/storage2/lei/Project/TRAPL_FUN/goslim_generic.obo"
+        self.uniprot_id_mapping_path = "/kauai/lei/Project/TRAPL_FUN/UniprotKB_GO/idmapping_selected.tab"
+        self.go_ontology_obo_path = "/kauai/lei/Project/TRAPL_FUN/gene_ontology.1_2.obo"
+        self.slim_go_ontology_obo_path = "/kauai/lei/Project/TRAPL_FUN/goslim_generic.obo"
         self.common_r_path = "bin/traplfunlib/common.R"
         self.blast2go_path = "bin/b2g4pipe"
         self.gsa_path = "bin/traplfunlib/gsa_analysis.R"

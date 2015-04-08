@@ -9,6 +9,9 @@ Mainly used for functional annotation of transcriptome data, but it can be broad
 ### Waiting list ###
 
 Welcome for your comments
+## Version 0.5.3 ##
+Add the enrichment target gene list
+change the goslim visualization to bar chart
 
 ## Version 0.5.2 ###
 Add the function for visualizing gene ontology trees

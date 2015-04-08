@@ -9,6 +9,9 @@ from subprocess import call
 import urllib
 import urllib.request
 import urllib.parse
+from operator import itemgetter
+from collections import OrderedDict
+
 
 class Goviz(object):
 	"""Uses mapping to detect the go terms"""
@@ -50,7 +53,6 @@ class Goviz(object):
 		color='lightblue'
 		new_go_list=[]
 		for go_id in go_list:
-			#new_go_list.append('\\"'+str(go_id)+'\\":{\\"fill\\": \\"'+str(color)+'\\"}')
 			new_go_list.append('\"'+str(go_id)+'\":{\"fill\": \"'+str(color)+'\"}')
 		term_data="{"+','.join(str(go_tmp) for go_tmp in new_go_list)+"}"
 		term_data_type='json'
@@ -67,7 +69,8 @@ class Goviz(object):
 		outfile.write(res.read())
 		outfile.close()
 	
-	def go_viz(self, enrichment_file, viz_revigo, viz_tag):
+	def go_viz(self, enrichment_file, viz_revigo, viz_tag, viz_goslim):
+		#For REVIGO use
 		viz_revigo_file = open(viz_revigo,"a")
 		viz_revigo_file.write("% created by TRAPL_FUN version 0.2" + "\n")
 		viz_revigo_file.write("% Enriched gene ontology list" + "\n")
@@ -90,6 +93,7 @@ class Goviz(object):
 			next(go_enrich)
 			for entry in go_enrich:
 				uni_lines = entry.rstrip().split("\t")
+				gene_list=uni_line[10]
 				if float(uni_lines[9]) <= 0.05 and uni_lines[1] != "biological_process" \
 						and uni_lines[1] != "cellular_component" and \
 						uni_lines[1] != "molecular_function":
@@ -132,36 +136,55 @@ class Goviz(object):
 		self._draw_go(enrich_go_term_mf,viz_tag + "_mf.png")
 		self._draw_go(enrich_go_term_cc,viz_tag + "_cc.png")
 		## Draw go slim figure
-		fig = pl.figure(figsize=[12,12])
+		fig = pl.figure()
 		ax = fig.add_subplot(111)
 		pl.rcParams['font.size'] = 8.0
+		fig.autofmt_xdate()
+		enrich_go_term_bp_sort=OrderedDict(sorted(enrich_go_term_bp_no.items(),key=itemgetter(1),reverse=True))
+		x_axis=[]
+		y_axis=[]
+		for line in enrich_go_term_bp_sort.keys():
+			x_axis.append(line)
+			y_axis.append(int(enrich_go_term_bp_sort[line]))
+		pl.bar(range(len(enrich_go_term_bp_sort)), y_axis,color="black")
 		enrich_go_term_bp=[]
-		for term_id in enrich_go_term_bp_id:
-			if term_id in enrich_go_term_bp_no:
-				enrich_go_term_bp.append(enrich_go_term_bp_no[term_id])
-		pl.pie(enrich_go_term_bp,labels=enrich_go_term_bp_id,autopct='%1.f%%',startangle=90)
-		pl.title('Enriched Biological process',color='black')
-		pl.savefig(viz_tag + "_biological_process.png",format='png',dpi=400)
+		pl.xticks(range(len(enrich_go_term_bp_sort)),x_axis)
+		pl.title('GO Slim category summary',color='black')
+		pl.savefig(viz_tag + "_biological_process.png",format='png',dpi=300,bbox_inches='tight')
 		pl.close()
-		fig = pl.figure(figsize=[12,12])
+		
+		fig = pl.figure(figsize=(12,12))
 		ax = fig.add_subplot(111)
 		pl.rcParams['font.size'] = 8.0
+		fig.autofmt_xdate()
+		enrich_go_term_mf_sort=OrderedDict(sorted(enrich_go_term_mf_no.items(),key=itemgetter(1),reverse=True))
+		x_axis=[]
+		y_axis=[]
+		for line in enrich_go_term_mf_sort.keys():
+			x_axis.append(line)
+			y_axis.append(int(enrich_go_term_mf_sort[line]))
+		pl.bar(range(len(enrich_go_term_mf_sort)), y_axis,color="black")
 		enrich_go_term_mf=[]
-		for term_id in enrich_go_term_mf_id:
-			if term_id in enrich_go_term_mf_no:
-				enrich_go_term_mf.append(enrich_go_term_mf_no[term_id])
-		pl.pie(enrich_go_term_mf,labels=enrich_go_term_mf_id,autopct='%1.f%%',startangle=90)
-		pl.title('Enriched Molecular function',color='black')
-		pl.savefig(viz_tag + "_molecular_function.png",format='png',dpi=400)
+		pl.xticks(range(len(enrich_go_term_mf_sort)),x_axis)
+		pl.title('GO Slim category summary',color='black')
+		pl.savefig(viz_tag + "_molecular_function.png",format='png',dpi=300,bbox_inches='tight')
 		pl.close()
-		fig = pl.figure(figsize=[12,12])
+		
+		fig = pl.figure(figsize=(1,1))
 		ax = fig.add_subplot(111)
 		pl.rcParams['font.size'] = 8.0
+		fig.autofmt_xdate()
+		enrich_go_term_cc_sort=OrderedDict(sorted(enrich_go_term_cc_no.items(),key=itemgetter(1),reverse=True))
+		x_axis=[]
+		y_axis=[]
+		for line in enrich_go_term_cc_sort.keys():
+			x_axis.append(line)
+			y_axis.append(int(enrich_go_term_cc_sort[line]))
+		pl.bar(range(len(enrich_go_term_cc_sort)), y_axis,color="black")
 		enrich_go_term_cc=[]
-		for term_id in enrich_go_term_cc_id:
-			if term_id in enrich_go_term_cc_no:
-				enrich_go_term_cc.append(enrich_go_term_cc_no[term_id])
-		pl.pie(enrich_go_term_cc,labels=enrich_go_term_cc_id,autopct='%1.f%%',startangle=90)
-		pl.title('Enriched Cellular component',color='black')
-		pl.savefig(viz_tag + "_cellular_component.png",format='png',dpi=400)
+		pl.xticks(range(len(enrich_go_term_cc_sort)),x_axis)
+		pl.title('GO Slim category summary',color='black')
+		pl.savefig(viz_tag + "_cellular_component.png",format='png',dpi=300,bbox_inches='tight')
 		pl.close()
+		
+		

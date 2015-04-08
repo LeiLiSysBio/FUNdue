@@ -79,7 +79,6 @@ class Controller(object):
         gsea = self._args.gsea
         fdr = self._args.gsea
         goterm_analysis = goenrichanalysis(gsea,fdr)
-        open(self._paths.go_enrich_list_path,"w").close()
         for target_id_each_file in target_id_paths:
             target_id_filename = os.path.basename(target_id_each_file)
             go_enrich_each_file = self._paths.go_enrich_folder + '/' + \
@@ -118,7 +117,6 @@ class Controller(object):
                                     kegg_gsea_each_file)
         
     def go_viz(self):
-        open(self._paths.go_viz_list_path,"w").close()
         target_id_files = self._paths.get_target_id_files()
         target_id_paths = self._paths.set_target_id_paths(target_id_files)
         for target_id_each_file in target_id_paths:

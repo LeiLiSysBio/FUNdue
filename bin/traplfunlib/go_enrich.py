@@ -74,14 +74,19 @@ class goenrichanalysis(object):
                                   association_list, go_obo)
         background_no = len(background_list)
         #target_no = len(target_list)
+                
+        ##iteratory each gene ontology, the related gene lists
+        target_term_list = count_obj.list_terms(target_list,
+                                    association_list, go_obo)
         num = 0
         summary = []
+        assoc_target_list={}
         for term, target_count in target_term.items():
             if go_obo[term].name == "'cellular_component'|'biological_process'|'molecular_function'":
                 pass
             else:
                 num = num + 1
-                print("the "+ str(num) +" term is processing")
+                print("the "+ str(num) +" term is processing:\t" + str(term))
                 background_count = background_term[term]
                 target_other = target_no - target_count
                 background_other = background_no - background_count
@@ -91,7 +96,7 @@ class goenrichanalysis(object):
                 ratio_background = float(background_count) / float(background_no)
                 summary.append([term, go_obo[term].name, go_obo[term].namespace, target_count, \
                     target_no, ratio_target, background_count, background_no, \
-                    ratio_background, pvalue])
+                    ratio_background, pvalue,target_term_list[str(term)]])
         pval_sum = [x[9] for x in summary]
         adjust_stats = importr('stats')
         p_adjust_fdr = adjust_stats.p_adjust(FloatVector(pval_sum),method='fdr')
@@ -99,11 +104,11 @@ class goenrichanalysis(object):
         for row_no in range(len(summary)):
             summary[row_no].extend([p_adjust_fdr[row_no],p_adjust_bf[row_no]])
         print("Writing to file")
-        with open(go_enrich_out,'a') as csvfile:
+        with open(go_enrich_out,'w',newline='') as csvfile:
             writer = csv.writer(csvfile,delimiter="\t")
             writer.writerow(['Gene ontology term', 'ontology description','ontologies', \
                 'target number','total target numbers', 'ratio of  targets', 'background_number', \
-                'total background numbers', 'ratio of background', 'pvalue', 'FDR', 'Bonferroni'])
+                'total background numbers', 'ratio of background', 'pvalue','assoc_target_list','FDR', 'Bonferroni'])
             for line in summary:
                 writer.writerow(line)
         print("# %0.2f seconds process time" % (time.clock() - timer))        
@@ -121,3 +126,19 @@ class count(object):
                     term_cnt[obo_dag[x].id] += 1
 
       return term_cnt
+    
+    def list_terms(self, geneset, assoc, obo_dag):
+        term_list = dict()
+        self.assoc = assoc
+        for each_gene in geneset:
+          each_gene_str = ''.join(each_gene)
+          if each_gene_str in assoc:
+              for x in assoc[each_gene_str]:
+                  if x in obo_dag:
+                      if obo_dag[x].id in term_list:
+                          term_list[obo_dag[x].id].append(each_gene_str)
+                      else:
+                          term_list[obo_dag[x].id]=[each_gene_str]
+        
+        return term_list
+
