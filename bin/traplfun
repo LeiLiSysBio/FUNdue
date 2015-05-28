@@ -39,6 +39,8 @@ def main():
         "project_path", default=".", nargs="?",
         help="Path of the project folder. If none is given the current "
         "directory is used.")
+    go_retrieving_parser.add_argument(
+        "--uniprot","-u", help = "uniprot id mapping file")
     go_retrieving_parser.set_defaults(func=go_terms)
 
     # Parameters for pathway retrieval
@@ -65,6 +67,8 @@ def main():
     go_enrich_parser.add_argument(
         "--gsea","-g", default="False",
         help="gene set enrichment analysis option")
+    go_enrich_parser.add_argument(
+        "--gobo","-G", help = "gene ontology obo file path")
     go_enrich_parser.set_defaults(func=go_stat)
 
     # Parameters for pathway enrichment analysis
@@ -89,6 +93,10 @@ def main():
         "project_path", default=".",nargs="?",
         help="Path of the project folder. If none is given, the current"
         "directory is used")
+    go_viz_parser.add_argument(
+        "--gobo","-G", help = "gene ontology obo file path")
+    go_viz_parser.add_argument(
+        "--slim","-s", help="gene ontology slim file")
     go_viz_parser.set_defaults(func=go_viz)
     
     # Parameters for pathway visulization

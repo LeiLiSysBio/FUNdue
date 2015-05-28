@@ -4,9 +4,13 @@ main(){
 	TRAPL_FUN_FOLDER=TRAPL_FUN_analysis
 	FTP_SOURCE=ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Salmonella_enterica_serovar_Typhimurium_SL1344_uid86645/
 	KEGG_organism_code=sey
+	Uniprot_id_mapping_path=/kauai/lei/Project/TRAPL_FUN/UniprotKB_GO/idmapping_selected.tab
+	Go_ontology_obo_path=/kauai/lei/Project/TRAPL_FUN/gene_ontology.1_2.obo
+	Slim_go_ontology_obo_path=/kauai/lei/Project/TRAPL_FUN/goslim_generic.obo
 	
 	# create_folders
 	# set_up_analysis_folder
+	# get_gene_ontology_files
 	# get_gff_files
 	# get_expression_files
 	# run_blast2go
@@ -39,6 +43,19 @@ set_up_analysis_folder(){
     fi
 }
 
+get_gene_ontology_files(){
+    echo "Downloading gene ontology files"
+    wget ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/idmapping_selected.tab.gz .
+    unzip idmapping_selected.tab.gz
+    wget http://www.geneontology.org/ontology/obo_format_1_2/gene_ontology.1_2.obo .
+    wget http://geneontology.org/ontology/subsets/goslim_generic.obo .
+    Uniprot_id_mapping_path=idmapping_selected.tab
+    Go_ontology_obo_path=gene_ontology.1_2.obo
+    Slim_go_ontology_obo_path=goslim_generic.obo
+}
+
+
+
 get_gff_files(){
     echo "Downloading GFF annotation files"
     wget -cP $TRAPL_FUN_FOLDER/input/annotations/ \
@@ -57,6 +74,7 @@ get_expression_files(){
 			awk -F"=" '{print $(NF)}' > ${DEST}/${file##*/}.txt
 	done
 }
+
 run_blast2go(){
 	if ! [ -f ${TRAPL_FUN_FOLDER}/input/blast2go_xml/* ]
 	then
@@ -72,6 +90,7 @@ run_retrieveGO(){
 	# ensemble id to gene ontology
 	$PYTHON_PATH $TRAPL_FUN_PATH \
 	retrieve \
+	-u $Uniprot_id_mapping_path \
 	$TRAPL_FUN_FOLDER
 }
 
@@ -85,12 +104,15 @@ run_retrievepathway(){
 run_go_enrichment_analysis(){
 	$PYTHON_PATH $TRAPL_FUN_PATH \
 	go_stat \
+	-G $Go_ontology_obo_path \
 	$TRAPL_FUN_FOLDER	
 }
 
 run_viz_go(){
 	$PYTHON_PATH $TRAPL_FUN_PATH \
 	go_viz \
+	-G $Go_ontology_obo_path \
+	-s $Slim_go_ontology_obo_path \
 	$TRAPL_FUN_FOLDER
 }
 

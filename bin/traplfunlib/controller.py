@@ -43,6 +43,7 @@ class Controller(object):
     def go_terms(self):
         self._test_folder_existance(
             self._paths.required_go_folders())
+        uniprot = self._args.uniprot
         annotation_files = self._paths.get_annotation_files()
         annotation_paths = self._paths.set_annotation_paths(annotation_files)
         go_creator = RetrieveGo()
@@ -60,7 +61,7 @@ class Controller(object):
 
         open(self._paths.go_background_list_path,"w").close()
         go_creator.retrieve_go(name_list,
-                               self._paths.uniprot_id_mapping_path,
+                               uniprot,
                                self._paths.go_background_list_path)
 
     def kegg_terms(self):
@@ -78,6 +79,7 @@ class Controller(object):
         self._test_folder_existance(target_id_paths)
         gsea = self._args.gsea
         fdr = self._args.gsea
+        go_obo = self._args.gobo
         goterm_analysis = goenrichanalysis(gsea,fdr)
         for target_id_each_file in target_id_paths:
             target_id_filename = os.path.basename(target_id_each_file)
@@ -90,7 +92,7 @@ class Controller(object):
             open(go_enrich_each_file,"w").close()
             goterm_analysis.go_enrichment(target_id_each_file,
                                     self._paths.go_background_list_path,
-                                    self._paths.go_ontology_obo_path,
+                                    go_obo,
                                     go_enrich_each_file,go_gsea_each_file)
 
 
@@ -119,6 +121,8 @@ class Controller(object):
     def go_viz(self):
         target_id_files = self._paths.get_target_id_files()
         target_id_paths = self._paths.set_target_id_paths(target_id_files)
+        gene_slim = self._args.slim
+        go_obo = self._args.gobo
         for target_id_each_file in target_id_paths:
             target_id_filename = os.path.basename(target_id_each_file)
             go_enrich_each_file = self._paths.go_enrich_folder + '/' + \
@@ -130,8 +134,8 @@ class Controller(object):
             go_viz_file_tag = self._paths.go_viz_folder + '/' + \
                                     target_id_filename
             open(go_viz_each_file,"w").close()
-            go_viz_object = Goviz(self._paths.go_ontology_obo_path, \
-                        self._paths.slim_go_ontology_obo_path, \
+            go_viz_object = Goviz(go_obo, \
+                        gene_slim, \
                         self._paths.common_r_path)
             go_viz_object.go_viz(go_enrich_each_file,
                             go_viz_each_file, go_viz_file_tag)

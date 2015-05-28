@@ -69,7 +69,7 @@ class Goviz(object):
 		outfile.write(res.read())
 		outfile.close()
 	
-	def go_viz(self, enrichment_file, viz_revigo, viz_tag, viz_goslim):
+	def go_viz(self, enrichment_file, viz_revigo, viz_tag):
 		#For REVIGO use
 		viz_revigo_file = open(viz_revigo,"a")
 		viz_revigo_file.write("% created by TRAPL_FUN version 0.2" + "\n")
@@ -93,7 +93,7 @@ class Goviz(object):
 			next(go_enrich)
 			for entry in go_enrich:
 				uni_lines = entry.rstrip().split("\t")
-				gene_list=uni_line[10]
+				gene_list=uni_lines[10]
 				if float(uni_lines[9]) <= 0.05 and uni_lines[1] != "biological_process" \
 						and uni_lines[1] != "cellular_component" and \
 						uni_lines[1] != "molecular_function":

@@ -98,7 +98,7 @@ class goenrichanalysis(object):
                     target_no, ratio_target, background_count, background_no, \
                     ratio_background, pvalue,target_term_list[str(term)]])
         pval_sum = [x[9] for x in summary]
-        adjust_stats = importr('stats')
+        adjust_stats = importr('stats',robject_translations={'format_perc': '_format_perc'})
         p_adjust_fdr = adjust_stats.p_adjust(FloatVector(pval_sum),method='fdr')
         p_adjust_bf = adjust_stats.p_adjust(FloatVector(pval_sum),method='bonferroni')
         for row_no in range(len(summary)):

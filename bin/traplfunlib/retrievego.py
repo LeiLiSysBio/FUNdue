@@ -15,7 +15,7 @@ class RetrieveGo(object):
         for uni_id in idmapping:
             uni_line = uni_id.rstrip("\n")
             uni_lines = uni_line.split("\t")
-            #print("You file is mapping...")
+            #print("You file is mapping..." + uni_lines[3])
             #for ref_name in name_list:
             if uni_lines[3] in name_list:
                 num = num + 1

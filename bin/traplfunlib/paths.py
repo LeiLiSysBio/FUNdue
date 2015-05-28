@@ -49,9 +49,6 @@ class Paths(object):
          
     def _set_static_files(self):
         self.version_path = "%s/used_trapl_fun_version.txt" % (self.output_folder)
-        self.uniprot_id_mapping_path = "/kauai/lei/Project/TRAPL_FUN/UniprotKB_GO/idmapping_selected.tab"
-        self.go_ontology_obo_path = "/kauai/lei/Project/TRAPL_FUN/gene_ontology.1_2.obo"
-        self.slim_go_ontology_obo_path = "/kauai/lei/Project/TRAPL_FUN/goslim_generic.obo"
         self.common_r_path = "bin/traplfunlib/common.R"
         self.blast2go_path = "bin/b2g4pipe"
         self.gsa_path = "bin/traplfunlib/gsa_analysis.R"
